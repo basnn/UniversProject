@@ -98,7 +98,8 @@ namespace CSVAnalyzer {
 
         List<Book^>^ books;                    // Все книги из CSV
         List<Book^>^ currentDisplayBooks;      // Текущие отображаемые книги (отсортированы по рейтингу)
-        List<Book^>^ baseFilteredBooks;        // Книги, отфильтрованные по жанру и активному фильтру (без сортировки)
+        List<Book^>^ baseFilteredBooks;        // Книги, отфильтрованные по жанру (без сортировки)
+        Dictionary<int, int>^ bookIndexMap;    // Маппинг: позиция в таблице -> индекс в baseFilteredBooks
 
         String^ currentFileName;
         String^ currentSelectedGenre;
@@ -154,6 +155,7 @@ namespace CSVAnalyzer {
             this->books = gcnew List<Book^>();
             this->currentDisplayBooks = gcnew List<Book^>();
             this->baseFilteredBooks = gcnew List<Book^>();
+            this->bookIndexMap = gcnew Dictionary<int, int>();
             this->chart1Regions = gcnew List<ChartClickRegion^>();
             this->chart2Regions = gcnew List<ChartClickRegion^>();
             this->chart3Regions = gcnew List<ChartClickRegion^>();
@@ -414,7 +416,7 @@ namespace CSVAnalyzer {
             this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
             this->MinimumSize = System::Drawing::Size(800, 600);
 
-          
+            
 
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewAllBooks))->EndInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBoxChart1))->EndInit();
@@ -524,8 +526,8 @@ namespace CSVAnalyzer {
             // Перерисовываем графики с подсветкой
             if (isDataLoaded)
             {
-                List<Book^>^ allGenreBooks = FilterBooksByGenre(currentSelectedGenre);
-                DrawCharts(allGenreBooks);
+                List<Book^>^ filtered = FilterBooksByGenre(currentSelectedGenre);
+                DrawCharts(filtered);
             }
         }
 
@@ -677,73 +679,79 @@ namespace CSVAnalyzer {
         {
             if (String::IsNullOrEmpty(currentSelectedGenre)) return;
 
-            List<Book^>^ genreFiltered = FilterBooksByGenre(currentSelectedGenre);
+            List<Book^>^ baseFiltered = FilterBooksByGenre(currentSelectedGenre);
 
-            // Применяем дополнительный фильтр от графика
+            // Сохраняем базовый список без сортировки
             baseFilteredBooks->Clear();
+            for each(Book ^ book in baseFiltered)
+            {
+                baseFilteredBooks->Add(book);
+            }
+
+            currentDisplayBooks->Clear();
+            bookIndexMap->Clear();
 
             if (activeFilter == "Year")
             {
                 int year = Int32::Parse(activeFilterValue);
-                for each(Book ^ book in genreFiltered)
+                for each(Book ^ book in baseFiltered)
                 {
                     if (book->Year == year)
-                        baseFilteredBooks->Add(book);
+                        currentDisplayBooks->Add(book);
                 }
             }
             else if (activeFilter == "Author")
             {
-                for each(Book ^ book in genreFiltered)
+                for each(Book ^ book in baseFiltered)
                 {
                     if (book->Author == activeFilterValue)
-                        baseFilteredBooks->Add(book);
+                        currentDisplayBooks->Add(book);
                 }
             }
             else if (activeFilter == "PriceRange")
             {
-                for each(Book ^ book in genreFiltered)
+                for each(Book ^ book in baseFiltered)
                 {
                     if (activeFilterValue == "0-10$" && book->Price < 10)
-                        baseFilteredBooks->Add(book);
+                        currentDisplayBooks->Add(book);
                     else if (activeFilterValue == "10-20$" && book->Price >= 10 && book->Price < 20)
-                        baseFilteredBooks->Add(book);
+                        currentDisplayBooks->Add(book);
                     else if (activeFilterValue == "20-30$" && book->Price >= 20 && book->Price < 30)
-                        baseFilteredBooks->Add(book);
+                        currentDisplayBooks->Add(book);
                     else if (activeFilterValue == "30-40$" && book->Price >= 30 && book->Price < 40)
-                        baseFilteredBooks->Add(book);
+                        currentDisplayBooks->Add(book);
                     else if (activeFilterValue == "40$+" && book->Price >= 40)
-                        baseFilteredBooks->Add(book);
+                        currentDisplayBooks->Add(book);
                 }
             }
             else if (activeFilter == "RatingRange")
             {
-                for each(Book ^ book in genreFiltered)
+                for each(Book ^ book in baseFiltered)
                 {
                     if (activeFilterValue == "0-1" && book->UserRating < 1)
-                        baseFilteredBooks->Add(book);
+                        currentDisplayBooks->Add(book);
                     else if (activeFilterValue == "1-2" && book->UserRating >= 1 && book->UserRating < 2)
-                        baseFilteredBooks->Add(book);
+                        currentDisplayBooks->Add(book);
                     else if (activeFilterValue == "2-3" && book->UserRating >= 2 && book->UserRating < 3)
-                        baseFilteredBooks->Add(book);
+                        currentDisplayBooks->Add(book);
                     else if (activeFilterValue == "3-4" && book->UserRating >= 3 && book->UserRating < 4)
-                        baseFilteredBooks->Add(book);
+                        currentDisplayBooks->Add(book);
                     else if (activeFilterValue == "4-5" && book->UserRating >= 4)
-                        baseFilteredBooks->Add(book);
+                        currentDisplayBooks->Add(book);
                 }
             }
             else
             {
-                // Если фильтр не активен, показываем все книги жанра
-                for each(Book ^ book in genreFiltered)
+                for each(Book ^ book in baseFiltered)
                 {
-                    baseFilteredBooks->Add(book);
+                    currentDisplayBooks->Add(book);
                 }
             }
 
-            if (baseFilteredBooks->Count > 0)
+            if (currentDisplayBooks->Count > 0)
             {
                 // Сортируем по рейтингу для отображения
-                array<Book^>^ sorted = baseFilteredBooks->ToArray();
+                array<Book^>^ sorted = currentDisplayBooks->ToArray();
                 Array::Sort(sorted, gcnew Comparison<Book^>(&MyForm::CompareBooksByRating));
 
                 // Очищаем и заполняем таблицу
@@ -774,19 +782,27 @@ namespace CSVAnalyzer {
                     statusLabel->Text = "Показано " + currentDisplayBooks->Count + " книг. " + GetFilterDescription();
                 }
 
-                // Перерисовываем графики с отфильтрованными данными
-                DrawCharts(baseFilteredBooks);
+                // Восстанавливаем выделение, если была выбрана книга
+                if (selectedBookIndex >= 0 && selectedBookIndex < currentDisplayBooks->Count &&
+                    currentDisplayBooks[selectedBookIndex] == selectedBook)
+                {
+                    isProgrammaticSelection = true;
+                    dataGridViewAllBooks->Rows[selectedBookIndex]->Selected = true;
+                    isProgrammaticSelection = false;
+                }
+                else
+                {
+                    selectedBook = nullptr;
+                    selectedBookIndex = -1;
+                }
             }
             else
             {
                 dataGridViewAllBooks->Rows->Clear();
-                currentDisplayBooks->Clear();
                 if (!String::IsNullOrEmpty(activeFilter))
                 {
                     statusLabel->Text = "Нет книг, соответствующих фильтру: " + GetFilterDescription();
                 }
-                // Перерисовываем графики с пустыми данными или со всеми книгами жанра?
-                DrawCharts(genreFiltered); // Показываем все книги жанра на графиках, но таблица пуста
             }
         }
 
@@ -845,17 +861,8 @@ namespace CSVAnalyzer {
                 Book^ savedSelectedBook = selectedBook;
                 int savedSelectedIndex = selectedBookIndex;
 
-                List<Book^>^ allGenreBooks = FilterBooksByGenre(currentSelectedGenre);
-
-                // Если есть активный фильтр, используем отфильтрованные данные для графиков
-                if (!String::IsNullOrEmpty(activeFilter))
-                {
-                    DrawCharts(baseFilteredBooks);
-                }
-                else
-                {
-                    DrawCharts(allGenreBooks);
-                }
+                List<Book^>^ filtered = FilterBooksByGenre(currentSelectedGenre);
+                DrawCharts(filtered);
 
                 activeFilter = savedFilter;
                 activeFilterValue = savedFilterValue;
@@ -928,16 +935,7 @@ namespace CSVAnalyzer {
 
                 if (isDataLoaded)
                 {
-                    // Для графиков используем текущие отфильтрованные данные
-                    List<Book^>^ dataForCharts;
-                    if (!String::IsNullOrEmpty(activeFilter))
-                    {
-                        dataForCharts = baseFilteredBooks;
-                    }
-                    else
-                    {
-                        dataForCharts = FilterBooksByGenre(currentSelectedGenre);
-                    }
+                    List<Book^>^ filtered = FilterBooksByGenre(currentSelectedGenre);
 
                     if (pictureBoxChart3->Image != nullptr)
                     {
@@ -946,7 +944,7 @@ namespace CSVAnalyzer {
                     }
 
                     chart3Regions->Clear();
-                    DrawDistributionChart(dataForCharts);
+                    DrawDistributionChart(filtered);
                 }
             }
         }
@@ -955,17 +953,17 @@ namespace CSVAnalyzer {
         {
             if (String::IsNullOrEmpty(currentSelectedGenre)) return;
 
-            List<Book^>^ genreFiltered = FilterBooksByGenre(currentSelectedGenre);
+            List<Book^>^ filtered = FilterBooksByGenre(currentSelectedGenre);
 
             // Сохраняем базовый список без сортировки
             baseFilteredBooks->Clear();
-            for each(Book ^ book in genreFiltered)
+            for each(Book ^ book in filtered)
             {
                 baseFilteredBooks->Add(book);
             }
 
             // Сортируем по рейтингу для отображения
-            array<Book^>^ sorted = genreFiltered->ToArray();
+            array<Book^>^ sorted = filtered->ToArray();
             Array::Sort(sorted, gcnew Comparison<Book^>(&MyForm::CompareBooksByRating));
 
             isProgrammaticSelection = true;
@@ -1006,9 +1004,9 @@ namespace CSVAnalyzer {
 
             isProgrammaticSelection = false;
 
-            DrawCharts(genreFiltered);
+            DrawCharts(filtered);
 
-            statusLabel->Text = "Показано " + genreFiltered->Count + " книг в жанре \"" +
+            statusLabel->Text = "Показано " + filtered->Count + " книг в жанре \"" +
                 (currentSelectedGenre == "Fiction" ? "Художественная" : "Нехудожественная") + "\"";
         }
 
@@ -1053,6 +1051,7 @@ namespace CSVAnalyzer {
                 books->Clear();
                 currentDisplayBooks->Clear();
                 baseFilteredBooks->Clear();
+                bookIndexMap->Clear();
                 dataGridViewAllBooks->Rows->Clear();
                 dataGridViewAllBooks->ClearSelection();
                 selectedBook = nullptr;
@@ -1247,14 +1246,14 @@ namespace CSVAnalyzer {
             RefreshCurrentView();
         }
 
-        void DrawCharts(List<Book^>^ dataForCharts)
+        void DrawCharts(List<Book^>^ filtered)
         {
-            DrawRatingChart(dataForCharts);
-            DrawReviewsChart(dataForCharts);
-            DrawDistributionChart(dataForCharts);
+            DrawRatingChart(filtered);
+            DrawReviewsChart(filtered);
+            DrawDistributionChart(filtered);
         }
 
-        void DrawRatingChart(List<Book^>^ dataForCharts)
+        void DrawRatingChart(List<Book^>^ filtered)
         {
             if (pictureBoxChart1->Width <= 0 || pictureBoxChart1->Height <= 0)
                 return;
@@ -1264,7 +1263,7 @@ namespace CSVAnalyzer {
             Dictionary<int, double>^ yearRatingSum = gcnew Dictionary<int, double>();
             Dictionary<int, int>^ yearRatingCount = gcnew Dictionary<int, int>();
 
-            for each(Book ^ book in dataForCharts)
+            for each(Book ^ book in filtered)
             {
                 if (!yearRatingSum->ContainsKey(book->Year))
                 {
@@ -1291,7 +1290,7 @@ namespace CSVAnalyzer {
             delete g;
         }
 
-        void DrawReviewsChart(List<Book^>^ dataForCharts)
+        void DrawReviewsChart(List<Book^>^ filtered)
         {
             if (pictureBoxChart2->Width <= 0 || pictureBoxChart2->Height <= 0)
                 return;
@@ -1300,7 +1299,7 @@ namespace CSVAnalyzer {
 
             Dictionary<int, int>^ yearReviews = gcnew Dictionary<int, int>();
 
-            for each(Book ^ book in dataForCharts)
+            for each(Book ^ book in filtered)
             {
                 if (!yearReviews->ContainsKey(book->Year))
                 {
@@ -1325,7 +1324,7 @@ namespace CSVAnalyzer {
             delete g;
         }
 
-        void DrawDistributionChart(List<Book^>^ dataForCharts)
+        void DrawDistributionChart(List<Book^>^ filtered)
         {
             if (pictureBoxChart3->Width <= 0 || pictureBoxChart3->Height <= 0)
                 return;
@@ -1342,17 +1341,17 @@ namespace CSVAnalyzer {
             if (currentSelectedMetric == "Author")
             {
                 title = "Топ-10 авторов по количеству книг";
-                DrawAuthorDistributionWithRegions(g, bmp->Width, bmp->Height, dataForCharts, title, chart3Regions);
+                DrawAuthorDistributionWithRegions(g, bmp->Width, bmp->Height, filtered, title, chart3Regions);
             }
             else if (currentSelectedMetric == "Price")
             {
                 title = "Распределение по цене ($)";
-                DrawPriceDistributionWithRegions(g, bmp->Width, bmp->Height, dataForCharts, title, chart3Regions);
+                DrawPriceDistributionWithRegions(g, bmp->Width, bmp->Height, filtered, title, chart3Regions);
             }
             else if (currentSelectedMetric == "Rating")
             {
                 title = "Распределение по рейтингу";
-                DrawRatingDistributionWithRegions(g, bmp->Width, bmp->Height, dataForCharts, title, chart3Regions);
+                DrawRatingDistributionWithRegions(g, bmp->Width, bmp->Height, filtered, title, chart3Regions);
             }
 
             if (pictureBoxChart3->Image != nullptr)
@@ -1363,11 +1362,11 @@ namespace CSVAnalyzer {
         }
 
         void DrawAuthorDistributionWithRegions(System::Drawing::Graphics^ g, int width, int height,
-            List<Book^>^ dataForCharts, String^ title, List<ChartClickRegion^>^ regions)
+            List<Book^>^ filtered, String^ title, List<ChartClickRegion^>^ regions)
         {
             Dictionary<String^, int>^ authorCount = gcnew Dictionary<String^, int>();
 
-            for each(Book ^ book in dataForCharts)
+            for each(Book ^ book in filtered)
             {
                 if (!authorCount->ContainsKey(book->Author))
                 {
@@ -1392,7 +1391,7 @@ namespace CSVAnalyzer {
         }
 
         void DrawPriceDistributionWithRegions(System::Drawing::Graphics^ g, int width, int height,
-            List<Book^>^ dataForCharts, String^ title, List<ChartClickRegion^>^ regions)
+            List<Book^>^ filtered, String^ title, List<ChartClickRegion^>^ regions)
         {
             Dictionary<String^, int>^ priceRanges = gcnew Dictionary<String^, int>();
             priceRanges->Add("0-10$", 0);
@@ -1401,7 +1400,7 @@ namespace CSVAnalyzer {
             priceRanges->Add("30-40$", 0);
             priceRanges->Add("40$+", 0);
 
-            for each(Book ^ book in dataForCharts)
+            for each(Book ^ book in filtered)
             {
                 if (book->Price < 10)
                     priceRanges["0-10$"]++;
@@ -1427,7 +1426,7 @@ namespace CSVAnalyzer {
         }
 
         void DrawRatingDistributionWithRegions(System::Drawing::Graphics^ g, int width, int height,
-            List<Book^>^ dataForCharts, String^ title, List<ChartClickRegion^>^ regions)
+            List<Book^>^ filtered, String^ title, List<ChartClickRegion^>^ regions)
         {
             Dictionary<String^, int>^ ratingRanges = gcnew Dictionary<String^, int>();
             ratingRanges->Add("0-1", 0);
@@ -1436,7 +1435,7 @@ namespace CSVAnalyzer {
             ratingRanges->Add("3-4", 0);
             ratingRanges->Add("4-5", 0);
 
-            for each(Book ^ book in dataForCharts)
+            for each(Book ^ book in filtered)
             {
                 if (book->UserRating < 1)
                     ratingRanges["0-1"]++;
