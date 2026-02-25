@@ -14,6 +14,7 @@ namespace CSVAnalyzer {
     using namespace System::IO;
     using namespace System::Collections::Generic;
     using namespace System::Drawing::Drawing2D;
+    using namespace System::Globalization;
 
     // Управляемая структура для книги
     public ref struct Book
@@ -262,7 +263,7 @@ namespace CSVAnalyzer {
             // labelMetric (перемещена на панель 3-го графика)
             this->labelMetric->Location = System::Drawing::Point(5, 5);
             this->labelMetric->Name = L"labelMetric";
-            this->labelMetric->Size = System::Drawing::Size(100, 20);
+            this->labelMetric->Size = System::Drawing::Size(80, 20);
             this->labelMetric->Text = L"Показатель:";
             this->labelMetric->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 
@@ -274,7 +275,7 @@ namespace CSVAnalyzer {
                     "По рейтингу"
             };
             this->comboBoxMetric->Items->AddRange(metrics);
-            this->comboBoxMetric->Location = System::Drawing::Point(110, 3);
+            this->comboBoxMetric->Location = System::Drawing::Point(90, 3);
             this->comboBoxMetric->Name = L"comboBoxMetric";
             this->comboBoxMetric->Size = System::Drawing::Size(120, 24);
             this->comboBoxMetric->TabIndex = 3;
@@ -469,7 +470,7 @@ namespace CSVAnalyzer {
                     if (!highlightedRatingRanges->Contains(ratingRange))
                         highlightedRatingRanges->Add(ratingRange);
 
-                    statusLabel->Text = "Выбрана книга: " + selectedBook->Name + " (" + selectedBook->Year + ")";
+                    statusLabel->Text = "Выбрана книга: " + selectedBook->Name + " (" + selectedBook->Year + ", $" + selectedBook->Price.ToString("F2") + ")";
                 }
             }
 
@@ -973,6 +974,9 @@ namespace CSVAnalyzer {
 
                 array<String^>^ lines = File::ReadAllLines(filename);
 
+                // Устанавливаем культуру для корректного парсинга чисел с точкой
+                CultureInfo^ culture = gcnew CultureInfo("en-US");
+
                 int validBooks = 0;
                 for (int i = 1; i < lines->Length; i++)
                 {
@@ -980,7 +984,7 @@ namespace CSVAnalyzer {
                     if (String::IsNullOrWhiteSpace(line))
                         continue;
 
-                    Book^ book = ParseCSVLine(line);
+                    Book^ book = ParseCSVLine(line, culture);
                     if (book != nullptr)
                     {
                         books->Add(book);
@@ -1019,7 +1023,7 @@ namespace CSVAnalyzer {
             }
         }
 
-        Book^ ParseCSVLine(String^ line)
+        Book^ ParseCSVLine(String^ line, CultureInfo^ culture)
         {
             try {
                 List<String^>^ fields = gcnew List<String^>();
@@ -1054,26 +1058,50 @@ namespace CSVAnalyzer {
                     book->Name = fields[0]->Trim('"');
                     book->Author = fields[1]->Trim('"');
 
+                    // Парсим рейтинг с учетом культуры (en-US для точки)
+                    String^ ratingStr = fields[2]->Trim();
                     double rating;
-                    if (Double::TryParse(fields[2], rating))
+                    if (Double::TryParse(ratingStr, NumberStyles::Any, culture, rating))
+                    {
                         book->UserRating = rating;
+                    }
                     else
-                        book->UserRating = 0.0;
+                    {
+                        // Пробуем парсить с текущей культурой как запасной вариант
+                        if (!Double::TryParse(ratingStr, rating))
+                        {
+                            book->UserRating = 0.0;
+                        }
+                    }
 
+                    // Парсим количество отзывов
+                    String^ reviewsStr = fields[3]->Trim();
                     int reviews;
-                    if (Int32::TryParse(fields[3], reviews))
+                    if (Int32::TryParse(reviewsStr, reviews))
                         book->Reviews = reviews;
                     else
                         book->Reviews = 0;
 
+                    // Парсим цену с учетом культуры (en-US для точки)
+                    String^ priceStr = fields[4]->Trim();
                     double price;
-                    if (Double::TryParse(fields[4], price))
+                    if (Double::TryParse(priceStr, NumberStyles::Any, culture, price))
+                    {
                         book->Price = price;
+                    }
                     else
-                        book->Price = 0.0;
+                    {
+                        // Пробуем парсить с текущей культурой как запасной вариант
+                        if (!Double::TryParse(priceStr, price))
+                        {
+                            book->Price = 0.0;
+                        }
+                    }
 
+                    // Парсим год
+                    String^ yearStr = fields[5]->Trim();
                     int year;
-                    if (Int32::TryParse(fields[5], year))
+                    if (Int32::TryParse(yearStr, year))
                         book->Year = year;
                     else
                         book->Year = 0;
@@ -1104,17 +1132,19 @@ namespace CSVAnalyzer {
             dataGridViewAllBooks->Columns->Clear();
             dataGridViewAllBooks->Rows->Clear();
 
-            dataGridViewAllBooks->ColumnCount = 5;
+            dataGridViewAllBooks->ColumnCount = 6;
             dataGridViewAllBooks->Columns[0]->Name = "№";
             dataGridViewAllBooks->Columns[0]->Width = 40;
             dataGridViewAllBooks->Columns[1]->Name = "Название";
-            dataGridViewAllBooks->Columns[1]->Width = 300;
+            dataGridViewAllBooks->Columns[1]->Width = 250;
             dataGridViewAllBooks->Columns[2]->Name = "Автор";
-            dataGridViewAllBooks->Columns[2]->Width = 200;
+            dataGridViewAllBooks->Columns[2]->Width = 180;
             dataGridViewAllBooks->Columns[3]->Name = "Рейтинг";
-            dataGridViewAllBooks->Columns[3]->Width = 70;
-            dataGridViewAllBooks->Columns[4]->Name = "Год";
-            dataGridViewAllBooks->Columns[4]->Width = 70;
+            dataGridViewAllBooks->Columns[3]->Width = 60;
+            dataGridViewAllBooks->Columns[4]->Name = "Цена";
+            dataGridViewAllBooks->Columns[4]->Width = 60;
+            dataGridViewAllBooks->Columns[5]->Name = "Год";
+            dataGridViewAllBooks->Columns[5]->Width = 50;
 
             for (int i = 0; i < sorted->Length; i++)
             {
@@ -1124,6 +1154,7 @@ namespace CSVAnalyzer {
                     book->Name,
                     book->Author,
                     book->UserRating.ToString("F1"),
+                    "$" + book->Price.ToString("F2"),
                     book->Year.ToString()
                 );
             }
