@@ -1,7 +1,8 @@
-#pragma once
+п»ї#pragma once
 #include <msclr\marshal.h>
 #include <msclr\marshal_cppstd.h>
 #include <Windows.h>
+
 
 namespace CSVAnalyzer {
 
@@ -16,29 +17,26 @@ namespace CSVAnalyzer {
     using namespace System::Drawing::Drawing2D;
     using namespace System::Globalization;
 
-    // Управляемая структура для книги
     public ref struct Book
     {
-        String^ Name;          // Название
-        String^ Author;        // Автор
-        double UserRating;     // Рейтинг
-        int Reviews;           // Отзывы
-        double Price;          // Цена
-        int Year;              // Год
-        String^ Genre;         // Жанр
+        String^ Name;
+        String^ Author;
+        double UserRating;
+        int Reviews;
+        double Price;
+        int Year;
+        String^ Genre;
     };
 
-    // Класс для хранения информации о кликабельной области графика
     public ref struct ChartClickRegion
     {
-        String^ Type;          // Тип области (Year, Author, PriceRange, RatingRange)
-        String^ Value;         // Значение
-        System::Drawing::Rectangle Bounds;      // Область для клика
-        Object^ Data;          // Дополнительные данные
-        bool IsHighlighted;    // Подсвечена ли область
+        String^ Type;
+        String^ Value;
+        System::Drawing::Rectangle Bounds;
+        Object^ Data;
+        bool IsHighlighted;
     };
 
-    // Класс для сравнения авторов (используется вместо лямбды)
     ref class AuthorComparer
     {
     public:
@@ -58,12 +56,10 @@ namespace CSVAnalyzer {
             this->comboBoxGenre->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::comboBoxGenre_SelectedIndexChanged);
             this->comboBoxMetric->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::comboBoxMetric_SelectedIndexChanged);
 
-            // Настройка копирования для DataGridView
             this->dataGridViewAllBooks->KeyDown += gcnew KeyEventHandler(this, &MyForm::dataGridViewAllBooks_KeyDown);
             this->dataGridViewAllBooks->MouseClick += gcnew MouseEventHandler(this, &MyForm::dataGridViewAllBooks_MouseClick);
             this->dataGridViewAllBooks->SelectionChanged += gcnew EventHandler(this, &MyForm::dataGridViewAllBooks_SelectionChanged);
 
-            // Настройка кликов по графикам
             this->pictureBoxChart1->MouseClick += gcnew MouseEventHandler(this, &MyForm::pictureBoxChart_MouseClick);
             this->pictureBoxChart2->MouseClick += gcnew MouseEventHandler(this, &MyForm::pictureBoxChart_MouseClick);
             this->pictureBoxChart3->MouseClick += gcnew MouseEventHandler(this, &MyForm::pictureBoxChart_MouseClick);
@@ -79,56 +75,53 @@ namespace CSVAnalyzer {
         }
 
     private:
-        // Элементы управления
-        System::Windows::Forms::ComboBox^ comboBoxGenre;      // Жанр
-        System::Windows::Forms::ComboBox^ comboBoxMetric;     // Метрика для 3-го графика
-        System::Windows::Forms::Label^ labelMetric;           // Подпись метрики
-        System::Windows::Forms::Label^ labelGenre;            // Подпись жанра
-        System::Windows::Forms::Button^ buttonAnalyze;        // Кнопка анализа
-        System::Windows::Forms::Button^ buttonLoadFile;       // Кнопка загрузки
-        System::Windows::Forms::DataGridView^ dataGridViewAllBooks; // Таблица всех книг
-        System::Windows::Forms::PictureBox^ pictureBoxChart1; // График рейтинга
-        System::Windows::Forms::PictureBox^ pictureBoxChart2; // График отзывов
-        System::Windows::Forms::PictureBox^ pictureBoxChart3; // График распределения
-        System::Windows::Forms::StatusStrip^ statusStrip;     // Строка состояния
-        System::Windows::Forms::ToolStripStatusLabel^ statusLabel; // Метка состояния
-        System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel; // Панель для графиков
-        System::Windows::Forms::SplitContainer^ splitContainer; // Разделитель
-        System::Windows::Forms::Panel^ panelControls;          // Панель управления
-        System::Windows::Forms::ContextMenuStrip^ contextMenu; // Контекстное меню
-        System::Windows::Forms::ToolStripMenuItem^ copyMenuItem; // Пункт меню копирования
-        System::Windows::Forms::Button^ buttonClearFilter;     // Кнопка сброса фильтра
-        System::Windows::Forms::Panel^ panelChart3Controls;    // Панель для элементов управления 3-го графика
+        System::Windows::Forms::ComboBox^ comboBoxGenre;
+        System::Windows::Forms::ComboBox^ comboBoxMetric;
+        System::Windows::Forms::Label^ labelMetric;
+        System::Windows::Forms::Label^ labelGenre;
+        System::Windows::Forms::Button^ buttonAnalyze;
+        System::Windows::Forms::Button^ buttonLoadFile;
+        System::Windows::Forms::Button^ buttonClearFilter;
+        System::Windows::Forms::DataGridView^ dataGridViewAllBooks;
+        System::Windows::Forms::PictureBox^ pictureBoxChart1;
+        System::Windows::Forms::PictureBox^ pictureBoxChart2;
+        System::Windows::Forms::PictureBox^ pictureBoxChart3;
+        System::Windows::Forms::StatusStrip^ statusStrip;
+        System::Windows::Forms::ToolStripStatusLabel^ statusLabel;
+        System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel;
+        System::Windows::Forms::SplitContainer^ splitContainer;
+        System::Windows::Forms::Panel^ panelControls;
+        System::Windows::Forms::Panel^ panelChart3Controls;
+        System::Windows::Forms::ContextMenuStrip^ contextMenu;
+        System::Windows::Forms::ToolStripMenuItem^ copyMenuItem;
         System::ComponentModel::Container^ components;
 
-        // Данные
-        List<Book^>^ books;           // Все книги
-        List<Book^>^ currentDisplayBooks; // Текущие отображаемые книги
-        String^ currentFileName;       // Текущий файл
-        String^ currentSelectedGenre;  // Выбранный жанр
-        String^ currentSelectedMetric; // Выбранная метрика для 3-го графика
-        bool isDataLoaded;             // Флаг загрузки данных
-        bool isResizing;               // Флаг изменения размера
-        bool isProgrammaticSelection;  // Флаг программного выделения
+        List<Book^>^ books;                    // Р’СЃРµ РєРЅРёРіРё РёР· CSV
+        List<Book^>^ currentDisplayBooks;      // РўРµРєСѓС‰РёРµ РѕС‚РѕР±СЂР°Р¶Р°РµРјС‹Рµ РєРЅРёРіРё (РѕС‚СЃРѕСЂС‚РёСЂРѕРІР°РЅС‹ РїРѕ СЂРµР№С‚РёРЅРіСѓ)
+        List<Book^>^ baseFilteredBooks;        // РљРЅРёРіРё, РѕС‚С„РёР»СЊС‚СЂРѕРІР°РЅРЅС‹Рµ РїРѕ Р¶Р°РЅСЂСѓ Рё Р°РєС‚РёРІРЅРѕРјСѓ С„РёР»СЊС‚СЂСѓ (Р±РµР· СЃРѕСЂС‚РёСЂРѕРІРєРё)
 
-        // Для интерактивных графиков
+        String^ currentFileName;
+        String^ currentSelectedGenre;
+        String^ currentSelectedMetric;
+        bool isDataLoaded;
+        bool isResizing;
+        bool isProgrammaticSelection;
+
         List<ChartClickRegion^>^ chart1Regions;
         List<ChartClickRegion^>^ chart2Regions;
         List<ChartClickRegion^>^ chart3Regions;
-        String^ activeFilter;          // Текущий активный фильтр
-        String^ activeFilterValue;     // Значение текущего фильтра
-        int activeChart;               // Номер активного графика (1, 2, 3) или 0 если фильтр не активен
+        String^ activeFilter;
+        String^ activeFilterValue;
+        int activeChart;
 
-        // Для подсветки на графиках
         List<String^>^ highlightedAuthors;
         List<int>^ highlightedYears;
         List<String^>^ highlightedPriceRanges;
         List<String^>^ highlightedRatingRanges;
 
-        // Для информации о выбранной книге
         Book^ selectedBook;
+        int selectedBookIndex;  // РРЅРґРµРєСЃ РІС‹Р±СЂР°РЅРЅРѕР№ РєРЅРёРіРё РІ currentDisplayBooks
 
-        // Вспомогательные методы
         static int CompareBooksByRating(Book^ a, Book^ b)
         {
             if (a->UserRating > b->UserRating) return -1;
@@ -160,6 +153,7 @@ namespace CSVAnalyzer {
 
             this->books = gcnew List<Book^>();
             this->currentDisplayBooks = gcnew List<Book^>();
+            this->baseFilteredBooks = gcnew List<Book^>();
             this->chart1Regions = gcnew List<ChartClickRegion^>();
             this->chart2Regions = gcnew List<ChartClickRegion^>();
             this->chart3Regions = gcnew List<ChartClickRegion^>();
@@ -178,12 +172,14 @@ namespace CSVAnalyzer {
             this->activeFilterValue = "";
             this->activeChart = 0;
             this->selectedBook = nullptr;
+            this->selectedBookIndex = -1;
 
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewAllBooks))->BeginInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBoxChart1))->BeginInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBoxChart2))->BeginInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBoxChart3))->BeginInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer))->BeginInit();
+
             this->splitContainer->SuspendLayout();
             this->statusStrip->SuspendLayout();
             this->tableLayoutPanel->SuspendLayout();
@@ -191,12 +187,15 @@ namespace CSVAnalyzer {
             this->contextMenu->SuspendLayout();
             this->SuspendLayout();
 
-            // Контекстное меню для копирования
-            this->copyMenuItem->Text = L"Копировать";
+            System::Drawing::Font^ defaultFont = gcnew System::Drawing::Font("Segoe UI", 9, System::Drawing::FontStyle::Regular);
+
+            this->Font = defaultFont;
+
+            this->copyMenuItem->Text = L"РљРѕРїРёСЂРѕРІР°С‚СЊ";
+            this->copyMenuItem->Font = defaultFont;
             this->copyMenuItem->Click += gcnew System::EventHandler(this, &MyForm::copyMenuItem_Click);
             this->contextMenu->Items->Add(this->copyMenuItem);
 
-            // panelControls
             this->panelControls->Controls->Add(this->labelGenre);
             this->panelControls->Controls->Add(this->comboBoxGenre);
             this->panelControls->Controls->Add(this->buttonLoadFile);
@@ -205,17 +204,17 @@ namespace CSVAnalyzer {
             this->panelControls->Dock = System::Windows::Forms::DockStyle::Top;
             this->panelControls->Height = 50;
             this->panelControls->Name = L"panelControls";
+            this->panelControls->Font = defaultFont;
 
-            // labelGenre
             this->labelGenre->Location = System::Drawing::Point(12, 15);
             this->labelGenre->Name = L"labelGenre";
             this->labelGenre->Size = System::Drawing::Size(50, 20);
-            this->labelGenre->Text = L"Жанр:";
+            this->labelGenre->Text = L"Р–Р°РЅСЂ:";
             this->labelGenre->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
+            this->labelGenre->Font = defaultFont;
 
-            // comboBoxGenre
             this->comboBoxGenre->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
-            array<String^>^ genres = gcnew array<String^> { "Художественная", "Нехудожественная" };
+            array<String^>^ genres = gcnew array<String^>{ "РҐСѓРґРѕР¶РµСЃС‚РІРµРЅРЅР°СЏ", "РќРµС…СѓРґРѕР¶РµСЃС‚РІРµРЅРЅР°СЏ" };
             this->comboBoxGenre->Items->AddRange(genres);
             this->comboBoxGenre->Location = System::Drawing::Point(70, 12);
             this->comboBoxGenre->Name = L"comboBoxGenre";
@@ -223,56 +222,56 @@ namespace CSVAnalyzer {
             this->comboBoxGenre->TabIndex = 0;
             this->comboBoxGenre->SelectedIndex = 0;
             this->comboBoxGenre->Enabled = false;
+            this->comboBoxGenre->Font = defaultFont;
 
-            // buttonLoadFile
             this->buttonLoadFile->Location = System::Drawing::Point(220, 12);
             this->buttonLoadFile->Name = L"buttonLoadFile";
             this->buttonLoadFile->Size = System::Drawing::Size(120, 23);
             this->buttonLoadFile->TabIndex = 1;
-            this->buttonLoadFile->Text = L"Загрузить CSV...";
+            this->buttonLoadFile->Text = L"Р—Р°РіСЂСѓР·РёС‚СЊ CSV...";
             this->buttonLoadFile->UseVisualStyleBackColor = true;
             this->buttonLoadFile->Click += gcnew System::EventHandler(this, &MyForm::buttonLoadFile_Click);
+            this->buttonLoadFile->Font = defaultFont;
 
-            // buttonAnalyze
             this->buttonAnalyze->Location = System::Drawing::Point(350, 12);
             this->buttonAnalyze->Name = L"buttonAnalyze";
             this->buttonAnalyze->Size = System::Drawing::Size(100, 23);
             this->buttonAnalyze->TabIndex = 2;
-            this->buttonAnalyze->Text = L"Анализ";
+            this->buttonAnalyze->Text = L"РђРЅР°Р»РёР·";
             this->buttonAnalyze->UseVisualStyleBackColor = true;
             this->buttonAnalyze->Click += gcnew System::EventHandler(this, &MyForm::buttonAnalyze_Click);
             this->buttonAnalyze->Enabled = false;
+            this->buttonAnalyze->Font = defaultFont;
 
-            // buttonClearFilter
             this->buttonClearFilter->Location = System::Drawing::Point(460, 12);
             this->buttonClearFilter->Name = L"buttonClearFilter";
             this->buttonClearFilter->Size = System::Drawing::Size(120, 23);
             this->buttonClearFilter->TabIndex = 4;
-            this->buttonClearFilter->Text = L"Сбросить фильтр";
+            this->buttonClearFilter->Text = L"РЎР±СЂРѕСЃРёС‚СЊ С„РёР»СЊС‚СЂ";
             this->buttonClearFilter->UseVisualStyleBackColor = true;
             this->buttonClearFilter->Click += gcnew System::EventHandler(this, &MyForm::buttonClearFilter_Click);
             this->buttonClearFilter->Enabled = false;
+            this->buttonClearFilter->Font = defaultFont;
 
-            // panelChart3Controls - панель для элементов управления 3-го графика
             this->panelChart3Controls->Controls->Add(this->labelMetric);
             this->panelChart3Controls->Controls->Add(this->comboBoxMetric);
-            this->panelChart3Controls->BackColor = System::Drawing::Color::LightGray;
+            this->panelChart3Controls->BackColor = System::Drawing::Color::Gainsboro;
             this->panelChart3Controls->Height = 30;
             this->panelChart3Controls->Dock = System::Windows::Forms::DockStyle::Bottom;
+            this->panelChart3Controls->Font = defaultFont;
 
-            // labelMetric (перемещена на панель 3-го графика)
             this->labelMetric->Location = System::Drawing::Point(5, 5);
             this->labelMetric->Name = L"labelMetric";
             this->labelMetric->Size = System::Drawing::Size(80, 20);
-            this->labelMetric->Text = L"Показатель:";
+            this->labelMetric->Text = L"РџРѕРєР°Р·Р°С‚РµР»СЊ:";
             this->labelMetric->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
+            this->labelMetric->Font = defaultFont;
 
-            // comboBoxMetric (перемещен на панель 3-го графика)
             this->comboBoxMetric->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
-            array<String^>^ metrics = gcnew array<String^> {
-                "По авторам",
-                    "По цене",
-                    "По рейтингу"
+            array<String^>^ metrics = gcnew array<String^>{
+                "РџРѕ Р°РІС‚РѕСЂР°Рј",
+                "РџРѕ С†РµРЅРµ",
+                "РџРѕ СЂРµР№С‚РёРЅРіСѓ"
             };
             this->comboBoxMetric->Items->AddRange(metrics);
             this->comboBoxMetric->Location = System::Drawing::Point(90, 3);
@@ -281,8 +280,8 @@ namespace CSVAnalyzer {
             this->comboBoxMetric->TabIndex = 3;
             this->comboBoxMetric->SelectedIndex = 0;
             this->comboBoxMetric->Enabled = false;
+            this->comboBoxMetric->Font = defaultFont;
 
-            // splitContainer
             this->splitContainer->Dock = System::Windows::Forms::DockStyle::Fill;
             this->splitContainer->Location = System::Drawing::Point(0, 50);
             this->splitContainer->Name = L"splitContainer";
@@ -290,13 +289,11 @@ namespace CSVAnalyzer {
             this->splitContainer->SplitterDistance = 450;
             this->splitContainer->TabIndex = 4;
 
-            // splitContainer.Panel1 - DataGridView
             this->splitContainer->Panel1->Controls->Add(this->dataGridViewAllBooks);
             this->dataGridViewAllBooks->Dock = System::Windows::Forms::DockStyle::Fill;
             this->dataGridViewAllBooks->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
             this->dataGridViewAllBooks->Name = L"dataGridViewAllBooks";
             this->dataGridViewAllBooks->RowHeadersWidth = 51;
-            this->dataGridViewAllBooks->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::Fill;
             this->dataGridViewAllBooks->AllowUserToAddRows = false;
             this->dataGridViewAllBooks->AllowUserToDeleteRows = false;
             this->dataGridViewAllBooks->ReadOnly = true;
@@ -304,11 +301,54 @@ namespace CSVAnalyzer {
             this->dataGridViewAllBooks->SelectionMode = DataGridViewSelectionMode::FullRowSelect;
             this->dataGridViewAllBooks->MultiSelect = false;
             this->dataGridViewAllBooks->ClipboardCopyMode = DataGridViewClipboardCopyMode::EnableAlwaysIncludeHeaderText;
+            this->dataGridViewAllBooks->Font = defaultFont;
+            this->dataGridViewAllBooks->BackgroundColor = System::Drawing::Color::White;
+            this->dataGridViewAllBooks->BorderStyle = BorderStyle::FixedSingle;
+            this->dataGridViewAllBooks->GridColor = System::Drawing::Color::FromArgb(240, 240, 240);
+            this->dataGridViewAllBooks->DefaultCellStyle->SelectionBackColor = System::Drawing::Color::FromArgb(210, 230, 250);
+            this->dataGridViewAllBooks->DefaultCellStyle->SelectionForeColor = System::Drawing::Color::Black;
 
-            // splitContainer.Panel2 - Charts
+            this->dataGridViewAllBooks->AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode::Fill;
+            this->dataGridViewAllBooks->ColumnCount = 6;
+
+            this->dataGridViewAllBooks->Columns[0]->Name = "в„–";
+            this->dataGridViewAllBooks->Columns[0]->MinimumWidth = 40;
+            this->dataGridViewAllBooks->Columns[0]->FillWeight = 5;
+            this->dataGridViewAllBooks->Columns[0]->SortMode = DataGridViewColumnSortMode::NotSortable;
+            this->dataGridViewAllBooks->Columns[0]->DefaultCellStyle->Alignment = DataGridViewContentAlignment::MiddleRight;
+
+            this->dataGridViewAllBooks->Columns[1]->Name = "РќР°Р·РІР°РЅРёРµ";
+            this->dataGridViewAllBooks->Columns[1]->MinimumWidth = 150;
+            this->dataGridViewAllBooks->Columns[1]->FillWeight = 40;
+            this->dataGridViewAllBooks->Columns[1]->SortMode = DataGridViewColumnSortMode::NotSortable;
+
+            this->dataGridViewAllBooks->Columns[2]->Name = "РђРІС‚РѕСЂ";
+            this->dataGridViewAllBooks->Columns[2]->MinimumWidth = 120;
+            this->dataGridViewAllBooks->Columns[2]->FillWeight = 25;
+            this->dataGridViewAllBooks->Columns[2]->SortMode = DataGridViewColumnSortMode::NotSortable;
+
+            this->dataGridViewAllBooks->Columns[3]->Name = "Р РµР№С‚РёРЅРі";
+            this->dataGridViewAllBooks->Columns[3]->MinimumWidth = 60;
+            this->dataGridViewAllBooks->Columns[3]->FillWeight = 10;
+            this->dataGridViewAllBooks->Columns[3]->SortMode = DataGridViewColumnSortMode::NotSortable;
+            this->dataGridViewAllBooks->Columns[3]->DefaultCellStyle->Alignment = DataGridViewContentAlignment::MiddleRight;
+
+            this->dataGridViewAllBooks->Columns[4]->Name = "Р¦РµРЅР°, $";
+            this->dataGridViewAllBooks->Columns[4]->MinimumWidth = 70;
+            this->dataGridViewAllBooks->Columns[4]->FillWeight = 10;
+            this->dataGridViewAllBooks->Columns[4]->SortMode = DataGridViewColumnSortMode::NotSortable;
+            this->dataGridViewAllBooks->Columns[4]->DefaultCellStyle->Alignment = DataGridViewContentAlignment::MiddleRight;
+
+            this->dataGridViewAllBooks->Columns[5]->Name = "Р“РѕРґ";
+            this->dataGridViewAllBooks->Columns[5]->MinimumWidth = 50;
+            this->dataGridViewAllBooks->Columns[5]->FillWeight = 10;
+            this->dataGridViewAllBooks->Columns[5]->SortMode = DataGridViewColumnSortMode::NotSortable;
+            this->dataGridViewAllBooks->Columns[5]->DefaultCellStyle->Alignment = DataGridViewContentAlignment::MiddleRight;
+
+            this->dataGridViewAllBooks->AllowUserToResizeColumns = true;
+
             this->splitContainer->Panel2->Controls->Add(this->tableLayoutPanel);
 
-            // tableLayoutPanel для графиков
             this->tableLayoutPanel->ColumnCount = 1;
             this->tableLayoutPanel->RowCount = 3;
             this->tableLayoutPanel->Dock = System::Windows::Forms::DockStyle::Fill;
@@ -317,7 +357,6 @@ namespace CSVAnalyzer {
             this->tableLayoutPanel->RowStyles->Add(gcnew RowStyle(SizeType::Percent, 33.33f));
             this->tableLayoutPanel->RowStyles->Add(gcnew RowStyle(SizeType::Percent, 33.33f));
 
-            // pictureBoxChart1 - Рейтинг
             this->pictureBoxChart1->Dock = System::Windows::Forms::DockStyle::Fill;
             this->pictureBoxChart1->Name = L"pictureBoxChart1";
             this->pictureBoxChart1->TabStop = false;
@@ -326,7 +365,6 @@ namespace CSVAnalyzer {
             this->pictureBoxChart1->Cursor = Cursors::Hand;
             this->pictureBoxChart1->Tag = 1;
 
-            // pictureBoxChart2 - Отзывы
             this->pictureBoxChart2->Dock = System::Windows::Forms::DockStyle::Fill;
             this->pictureBoxChart2->Name = L"pictureBoxChart2";
             this->pictureBoxChart2->TabStop = false;
@@ -335,39 +373,36 @@ namespace CSVAnalyzer {
             this->pictureBoxChart2->Cursor = Cursors::Hand;
             this->pictureBoxChart2->Tag = 2;
 
-            // pictureBoxChart3 - Распределение с панелью управления
             this->pictureBoxChart3->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->pictureBoxChart3->Name = L"pictureBoxChart3";
             this->pictureBoxChart3->TabStop = false;
             this->pictureBoxChart3->BackColor = System::Drawing::Color::White;
             this->pictureBoxChart3->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
             this->pictureBoxChart3->Cursor = Cursors::Hand;
             this->pictureBoxChart3->Tag = 3;
 
-            // Добавляем графики в TableLayoutPanel
             this->tableLayoutPanel->Controls->Add(this->pictureBoxChart1, 0, 0);
             this->tableLayoutPanel->Controls->Add(this->pictureBoxChart2, 0, 1);
 
-            // Для 3-го графика создаем составной элемент
             System::Windows::Forms::Panel^ panelChart3 = gcnew System::Windows::Forms::Panel();
             panelChart3->Dock = System::Windows::Forms::DockStyle::Fill;
             panelChart3->Controls->Add(this->pictureBoxChart3);
             panelChart3->Controls->Add(this->panelChart3Controls);
             this->tableLayoutPanel->Controls->Add(panelChart3, 0, 2);
 
-            // statusStrip
             this->statusStrip->Items->AddRange(gcnew cli::array<System::Windows::Forms::ToolStripItem^>(1) { this->statusLabel });
             this->statusStrip->Location = System::Drawing::Point(0, 700);
             this->statusStrip->Name = L"statusStrip";
             this->statusStrip->Size = System::Drawing::Size(1200, 22);
             this->statusStrip->TabIndex = 5;
             this->statusStrip->Text = L"statusStrip";
+            this->statusStrip->Font = defaultFont;
 
-            // statusLabel
             this->statusLabel->Name = L"statusLabel";
             this->statusLabel->Size = System::Drawing::Size(1185, 17);
-            this->statusLabel->Text = L"Готов. Нажмите 'Загрузить CSV...' для выбора файла.";
+            this->statusLabel->Text = L"Р“РѕС‚РѕРІ. РќР°Р¶РјРёС‚Рµ 'Р—Р°РіСЂСѓР·РёС‚СЊ CSV...' РґР»СЏ РІС‹Р±РѕСЂР° С„Р°Р№Р»Р°.";
+            this->statusLabel->Font = defaultFont;
 
-            // MyForm
             this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
             this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
             this->ClientSize = System::Drawing::Size(1200, 722);
@@ -375,32 +410,35 @@ namespace CSVAnalyzer {
             this->Controls->Add(this->panelControls);
             this->Controls->Add(this->statusStrip);
             this->Name = L"MyForm";
-            this->Text = L"Анализатор CSV - Книжные бестселлеры Amazon 2009-2019";
+            this->Text = L"РђРЅР°Р»РёР·Р°С‚РѕСЂ CSV - РљРЅРёР¶РЅС‹Рµ Р±РµСЃС‚СЃРµР»Р»РµСЂС‹ Amazon 2009-2019";
             this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-            this->MinimumSize = System::Drawing::Size(1000, 600);
+            this->MinimumSize = System::Drawing::Size(800, 600);
+
+          
 
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewAllBooks))->EndInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBoxChart1))->EndInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBoxChart2))->EndInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBoxChart3))->EndInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer))->EndInit();
-            this->splitContainer->ResumeLayout(false);
-            this->statusStrip->ResumeLayout(false);
+
+            this->splitContainer->ResumeLayout();
+            this->statusStrip->ResumeLayout();
             this->statusStrip->PerformLayout();
-            this->tableLayoutPanel->ResumeLayout(false);
-            this->panelControls->ResumeLayout(false);
-            this->contextMenu->ResumeLayout(false);
-            this->ResumeLayout(false);
+            this->tableLayoutPanel->ResumeLayout();
+            this->panelControls->ResumeLayout();
+            this->contextMenu->ResumeLayout();
+            this->ResumeLayout();
             this->PerformLayout();
         }
 
-        // Обработчик для копирования через контекстное меню
+        // РћР±СЂР°Р±РѕС‚С‡РёРє РґР»СЏ РєРѕРїРёСЂРѕРІР°РЅРёСЏ С‡РµСЂРµР· РєРѕРЅС‚РµРєСЃС‚РЅРѕРµ РјРµРЅСЋ
         System::Void copyMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
         {
             CopySelectedCells();
         }
 
-        // Обработчик для копирования через Ctrl+C
+        // РћР±СЂР°Р±РѕС‚С‡РёРє РґР»СЏ РєРѕРїРёСЂРѕРІР°РЅРёСЏ С‡РµСЂРµР· Ctrl+C
         System::Void dataGridViewAllBooks_KeyDown(System::Object^ sender, KeyEventArgs^ e)
         {
             if (e->Control && e->KeyCode == Keys::C)
@@ -410,7 +448,7 @@ namespace CSVAnalyzer {
             }
         }
 
-        // Обработчик для контекстного меню по правому клику
+        // РћР±СЂР°Р±РѕС‚С‡РёРє РґР»СЏ РєРѕРЅС‚РµРєСЃС‚РЅРѕРіРѕ РјРµРЅСЋ РїРѕ РїСЂР°РІРѕРјСѓ РєР»РёРєСѓ
         System::Void dataGridViewAllBooks_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
         {
             if (e->Button == System::Windows::Forms::MouseButtons::Right)
@@ -418,71 +456,80 @@ namespace CSVAnalyzer {
                 DataGridView::HitTestInfo^ hit = dataGridViewAllBooks->HitTest(e->X, e->Y);
                 if (hit->Type == DataGridViewHitTestType::Cell)
                 {
-                    if (dataGridViewAllBooks->Rows[hit->RowIndex]->Selected)
+                    int rowIndex = hit->RowIndex;
+                    if (rowIndex >= 0 && rowIndex < dataGridViewAllBooks->Rows->Count)
                     {
-                        // Если строка уже выделена, снимаем выделение
-                        dataGridViewAllBooks->ClearSelection();
-                        selectedBook = nullptr;
-                        ClearHighlights();
-                        RefreshCurrentView();
-                    }
-                    else
-                    {
-                        // Выделяем новую строку
-                        dataGridViewAllBooks->ClearSelection();
-                        dataGridViewAllBooks->Rows[hit->RowIndex]->Selected = true;
+                        if (dataGridViewAllBooks->Rows[rowIndex]->Selected)
+                        {
+                            // Р•СЃР»Рё СЃС‚СЂРѕРєР° СѓР¶Рµ РІС‹РґРµР»РµРЅР°, СЃРЅРёРјР°РµРј РІС‹РґРµР»РµРЅРёРµ
+                            dataGridViewAllBooks->ClearSelection();
+                            selectedBook = nullptr;
+                            selectedBookIndex = -1;
+                            ClearHighlights();
+                            RefreshCurrentView();
+                        }
+                        else
+                        {
+                            // Р’С‹РґРµР»СЏРµРј РЅРѕРІСѓСЋ СЃС‚СЂРѕРєСѓ
+                            dataGridViewAllBooks->ClearSelection();
+                            dataGridViewAllBooks->Rows[rowIndex]->Selected = true;
+                        }
                     }
                 }
             }
         }
 
-        // Обработчик изменения выделения в таблице
+        // РћР±СЂР°Р±РѕС‚С‡РёРє РёР·РјРµРЅРµРЅРёСЏ РІС‹РґРµР»РµРЅРёСЏ РІ С‚Р°Р±Р»РёС†Рµ
         System::Void dataGridViewAllBooks_SelectionChanged(System::Object^ sender, EventArgs^ e)
         {
             if (!isDataLoaded || isResizing || isProgrammaticSelection) return;
 
-            // Очищаем все подсветки
+            // РћС‡РёС‰Р°РµРј РІСЃРµ РїРѕРґСЃРІРµС‚РєРё
             ClearHighlights();
             selectedBook = nullptr;
+            selectedBookIndex = -1;
 
             if (dataGridViewAllBooks->SelectedRows->Count > 0)
             {
                 DataGridViewRow^ selectedRow = dataGridViewAllBooks->SelectedRows[0];
-                if (selectedRow->Index < currentDisplayBooks->Count)
-                {
-                    selectedBook = currentDisplayBooks[selectedRow->Index];
+                int rowIndex = selectedRow->Index;
 
-                    // Подсвечиваем автора
+                if (rowIndex >= 0 && rowIndex < currentDisplayBooks->Count)
+                {
+                    selectedBook = currentDisplayBooks[rowIndex];
+                    selectedBookIndex = rowIndex;
+
+                    // РџРѕРґСЃРІРµС‡РёРІР°РµРј Р°РІС‚РѕСЂР°
                     if (!highlightedAuthors->Contains(selectedBook->Author))
                         highlightedAuthors->Add(selectedBook->Author);
 
-                    // Подсвечиваем год
+                    // РџРѕРґСЃРІРµС‡РёРІР°РµРј РіРѕРґ
                     if (!highlightedYears->Contains(selectedBook->Year))
                         highlightedYears->Add(selectedBook->Year);
 
-                    // Определяем ценовой диапазон
+                    // РћРїСЂРµРґРµР»СЏРµРј С†РµРЅРѕРІРѕР№ РґРёР°РїР°Р·РѕРЅ
                     String^ priceRange = GetPriceRange(selectedBook->Price);
                     if (!highlightedPriceRanges->Contains(priceRange))
                         highlightedPriceRanges->Add(priceRange);
 
-                    // Определяем диапазон рейтинга
+                    // РћРїСЂРµРґРµР»СЏРµРј РґРёР°РїР°Р·РѕРЅ СЂРµР№С‚РёРЅРіР°
                     String^ ratingRange = GetRatingRange(selectedBook->UserRating);
                     if (!highlightedRatingRanges->Contains(ratingRange))
                         highlightedRatingRanges->Add(ratingRange);
 
-                    statusLabel->Text = "Выбрана книга: " + selectedBook->Name + " (" + selectedBook->Year + ", $" + selectedBook->Price.ToString("F2") + ")";
+                    statusLabel->Text = "Р’С‹Р±СЂР°РЅР° РєРЅРёРіР°: " + selectedBook->Name + " (" + selectedBook->Year + ", $" + selectedBook->Price.ToString("F2") + ")";
                 }
             }
 
-            // Перерисовываем графики с подсветкой
+            // РџРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РіСЂР°С„РёРєРё СЃ РїРѕРґСЃРІРµС‚РєРѕР№
             if (isDataLoaded)
             {
-                List<Book^>^ filtered = FilterBooksByGenre(currentSelectedGenre);
-                DrawCharts(filtered);
+                List<Book^>^ allGenreBooks = FilterBooksByGenre(currentSelectedGenre);
+                DrawCharts(allGenreBooks);
             }
         }
 
-        // Очистка всех подсветок
+        // РћС‡РёСЃС‚РєР° РІСЃРµС… РїРѕРґСЃРІРµС‚РѕРє
         void ClearHighlights()
         {
             highlightedAuthors->Clear();
@@ -491,7 +538,7 @@ namespace CSVAnalyzer {
             highlightedRatingRanges->Clear();
         }
 
-        // Получение ценового диапазона
+        // РџРѕР»СѓС‡РµРЅРёРµ С†РµРЅРѕРІРѕРіРѕ РґРёР°РїР°Р·РѕРЅР° (РІ РґРѕР»Р»Р°СЂР°С… РґР»СЏ С„РёР»СЊС‚СЂР°С†РёРё)
         String^ GetPriceRange(double price)
         {
             if (price < 10) return "0-10$";
@@ -501,7 +548,7 @@ namespace CSVAnalyzer {
             return "40$+";
         }
 
-        // Получение диапазона рейтинга
+        // РџРѕР»СѓС‡РµРЅРёРµ РґРёР°РїР°Р·РѕРЅР° СЂРµР№С‚РёРЅРіР°
         String^ GetRatingRange(double rating)
         {
             if (rating < 1) return "0-1";
@@ -511,7 +558,7 @@ namespace CSVAnalyzer {
             return "4-5";
         }
 
-        // Обработчик клика по графикам
+        // РћР±СЂР°Р±РѕС‚С‡РёРє РєР»РёРєР° РїРѕ РіСЂР°С„РёРєР°Рј
         System::Void pictureBoxChart_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
         {
             PictureBox^ chart = safe_cast<PictureBox^>(sender);
@@ -525,19 +572,27 @@ namespace CSVAnalyzer {
             else
                 regions = chart3Regions;
 
-            // Проверяем, кликнули ли по какой-либо области
-            for each (ChartClickRegion ^ region in regions)
+            for each(ChartClickRegion ^ region in regions)
             {
                 if (region->Bounds.Contains(e->Location))
                 {
-                    // Если кликнули по той же области, что и активный фильтр - сбрасываем
+                    // РЎР±СЂР°СЃС‹РІР°РµРј РІС‹РґРµР»РµРЅРёРµ РєРЅРёРіРё РїСЂРё РїСЂРёРјРµРЅРµРЅРёРё С„РёР»СЊС‚СЂР°
+                    if (selectedBook != nullptr)
+                    {
+                        isProgrammaticSelection = true;
+                        dataGridViewAllBooks->ClearSelection();
+                        isProgrammaticSelection = false;
+                        selectedBook = nullptr;
+                        selectedBookIndex = -1;
+                        ClearHighlights();
+                    }
+
                     if (activeChart == chartNumber && activeFilter == region->Type && activeFilterValue == region->Value)
                     {
                         ClearFilter();
                     }
                     else
                     {
-                        // Устанавливаем новый фильтр
                         ApplyFilter(chartNumber, region);
                     }
                     break;
@@ -545,24 +600,21 @@ namespace CSVAnalyzer {
             }
         }
 
-        // Применение фильтра
+        // РџСЂРёРјРµРЅРµРЅРёРµ С„РёР»СЊС‚СЂР°
         void ApplyFilter(int chartNumber, ChartClickRegion^ region)
         {
             activeChart = chartNumber;
             activeFilter = region->Type;
             activeFilterValue = region->Value;
 
-            // Подсвечиваем активный график
             HighlightActiveChart(chartNumber);
-
-            // Обновляем таблицу с отфильтрованными данными
             UpdateFilteredView();
 
-            statusLabel->Text = "Фильтр: " + GetFilterDescription();
+            statusLabel->Text = "Р¤РёР»СЊС‚СЂ: " + GetFilterDescription();
             buttonClearFilter->Enabled = true;
         }
 
-        // Сброс фильтра
+        // РЎР±СЂРѕСЃ С„РёР»СЊС‚СЂР°
         System::Void buttonClearFilter_Click(System::Object^ sender, System::EventArgs^ e)
         {
             ClearFilter();
@@ -574,17 +626,14 @@ namespace CSVAnalyzer {
             activeFilter = "";
             activeFilterValue = "";
 
-            // Убираем подсветку со всех графиков
             ResetChartHighlights();
-
-            // Возвращаем обычное отображение
             RefreshCurrentView();
 
-            statusLabel->Text = "Фильтр сброшен";
+            statusLabel->Text = "Р¤РёР»СЊС‚СЂ СЃР±СЂРѕС€РµРЅ";
             buttonClearFilter->Enabled = false;
         }
 
-        // Подсветка активного графика
+        // РџРѕРґСЃРІРµС‚РєР° Р°РєС‚РёРІРЅРѕРіРѕ РіСЂР°С„РёРєР°
         void HighlightActiveChart(int chartNumber)
         {
             ResetChartHighlights();
@@ -600,7 +649,7 @@ namespace CSVAnalyzer {
             activeChartBox->BorderStyle = BorderStyle::Fixed3D;
         }
 
-        // Сброс подсветки графиков
+        // РЎР±СЂРѕСЃ РїРѕРґСЃРІРµС‚РєРё РіСЂР°С„РёРєРѕРІ
         void ResetChartHighlights()
         {
             pictureBoxChart1->BorderStyle = BorderStyle::FixedSingle;
@@ -608,111 +657,140 @@ namespace CSVAnalyzer {
             pictureBoxChart3->BorderStyle = BorderStyle::FixedSingle;
         }
 
-        // Получение описания фильтра
+        // РџРѕР»СѓС‡РµРЅРёРµ РѕРїРёСЃР°РЅРёСЏ С„РёР»СЊС‚СЂР°
         String^ GetFilterDescription()
         {
             if (activeFilter == "Year")
-                return "Год: " + activeFilterValue;
+                return "Р“РѕРґ: " + activeFilterValue;
             else if (activeFilter == "Author")
-                return "Автор: " + activeFilterValue;
+                return "РђРІС‚РѕСЂ: " + activeFilterValue;
             else if (activeFilter == "PriceRange")
-                return "Цена: " + activeFilterValue;
+                return "Р¦РµРЅР°: " + activeFilterValue;
             else if (activeFilter == "RatingRange")
-                return "Рейтинг: " + activeFilterValue;
+                return "Р РµР№С‚РёРЅРі: " + activeFilterValue;
             else
                 return "";
         }
 
-        // Обновление отфильтрованного представления
+        // РћР±РЅРѕРІР»РµРЅРёРµ РѕС‚С„РёР»СЊС‚СЂРѕРІР°РЅРЅРѕРіРѕ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ
         void UpdateFilteredView()
         {
             if (String::IsNullOrEmpty(currentSelectedGenre)) return;
 
-            List<Book^>^ baseFiltered = FilterBooksByGenre(currentSelectedGenre);
-            currentDisplayBooks->Clear();
+            List<Book^>^ genreFiltered = FilterBooksByGenre(currentSelectedGenre);
 
-            // Применяем дополнительный фильтр от графика
+            // РџСЂРёРјРµРЅСЏРµРј РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Р№ С„РёР»СЊС‚СЂ РѕС‚ РіСЂР°С„РёРєР°
+            baseFilteredBooks->Clear();
+
             if (activeFilter == "Year")
             {
                 int year = Int32::Parse(activeFilterValue);
-                for each (Book ^ book in baseFiltered)
+                for each(Book ^ book in genreFiltered)
                 {
                     if (book->Year == year)
-                        currentDisplayBooks->Add(book);
+                        baseFilteredBooks->Add(book);
                 }
             }
             else if (activeFilter == "Author")
             {
-                for each (Book ^ book in baseFiltered)
+                for each(Book ^ book in genreFiltered)
                 {
                     if (book->Author == activeFilterValue)
-                        currentDisplayBooks->Add(book);
+                        baseFilteredBooks->Add(book);
                 }
             }
             else if (activeFilter == "PriceRange")
             {
-                for each (Book ^ book in baseFiltered)
+                for each(Book ^ book in genreFiltered)
                 {
                     if (activeFilterValue == "0-10$" && book->Price < 10)
-                        currentDisplayBooks->Add(book);
+                        baseFilteredBooks->Add(book);
                     else if (activeFilterValue == "10-20$" && book->Price >= 10 && book->Price < 20)
-                        currentDisplayBooks->Add(book);
+                        baseFilteredBooks->Add(book);
                     else if (activeFilterValue == "20-30$" && book->Price >= 20 && book->Price < 30)
-                        currentDisplayBooks->Add(book);
+                        baseFilteredBooks->Add(book);
                     else if (activeFilterValue == "30-40$" && book->Price >= 30 && book->Price < 40)
-                        currentDisplayBooks->Add(book);
+                        baseFilteredBooks->Add(book);
                     else if (activeFilterValue == "40$+" && book->Price >= 40)
-                        currentDisplayBooks->Add(book);
+                        baseFilteredBooks->Add(book);
                 }
             }
             else if (activeFilter == "RatingRange")
             {
-                for each (Book ^ book in baseFiltered)
+                for each(Book ^ book in genreFiltered)
                 {
                     if (activeFilterValue == "0-1" && book->UserRating < 1)
-                        currentDisplayBooks->Add(book);
+                        baseFilteredBooks->Add(book);
                     else if (activeFilterValue == "1-2" && book->UserRating >= 1 && book->UserRating < 2)
-                        currentDisplayBooks->Add(book);
+                        baseFilteredBooks->Add(book);
                     else if (activeFilterValue == "2-3" && book->UserRating >= 2 && book->UserRating < 3)
-                        currentDisplayBooks->Add(book);
+                        baseFilteredBooks->Add(book);
                     else if (activeFilterValue == "3-4" && book->UserRating >= 3 && book->UserRating < 4)
-                        currentDisplayBooks->Add(book);
+                        baseFilteredBooks->Add(book);
                     else if (activeFilterValue == "4-5" && book->UserRating >= 4)
-                        currentDisplayBooks->Add(book);
+                        baseFilteredBooks->Add(book);
                 }
             }
             else
             {
-                // Если фильтр не активен, показываем все книги
-                for each (Book ^ book in baseFiltered)
+                // Р•СЃР»Рё С„РёР»СЊС‚СЂ РЅРµ Р°РєС‚РёРІРµРЅ, РїРѕРєР°Р·С‹РІР°РµРј РІСЃРµ РєРЅРёРіРё Р¶Р°РЅСЂР°
+                for each(Book ^ book in genreFiltered)
                 {
-                    currentDisplayBooks->Add(book);
+                    baseFilteredBooks->Add(book);
                 }
             }
 
-            if (currentDisplayBooks->Count > 0)
+            if (baseFilteredBooks->Count > 0)
             {
-                array<Book^>^ sortedByRating = currentDisplayBooks->ToArray();
-                Array::Sort(sortedByRating, gcnew Comparison<Book^>(&MyForm::CompareBooksByRating));
+                // РЎРѕСЂС‚РёСЂСѓРµРј РїРѕ СЂРµР№С‚РёРЅРіСѓ РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
+                array<Book^>^ sorted = baseFilteredBooks->ToArray();
+                Array::Sort(sorted, gcnew Comparison<Book^>(&MyForm::CompareBooksByRating));
 
-                UpdateAllBooksGrid(sortedByRating);
+                // РћС‡РёС‰Р°РµРј Рё Р·Р°РїРѕР»РЅСЏРµРј С‚Р°Р±Р»РёС†Сѓ
+                dataGridViewAllBooks->Rows->Clear();
+                currentDisplayBooks->Clear();
+
+                for (int i = 0; i < sorted->Length; i++)
+                {
+                    Book^ book = sorted[i];
+                    currentDisplayBooks->Add(book);
+
+                    String^ ratingStr = book->UserRating.ToString("F1", CultureInfo::InvariantCulture);
+
+                    dataGridViewAllBooks->Rows->Add(
+                        (i + 1).ToString(),
+                        book->Name,
+                        book->Author,
+                        ratingStr,
+                        "$" + book->Price.ToString("F2"),
+                        book->Year.ToString()
+                    );
+                }
+
+                dataGridViewAllBooks->AutoResizeColumns(DataGridViewAutoSizeColumnsMode::DisplayedCells);
 
                 if (!String::IsNullOrEmpty(activeFilter))
                 {
-                    statusLabel->Text = "Показано " + currentDisplayBooks->Count + " книг. " + GetFilterDescription();
+                    statusLabel->Text = "РџРѕРєР°Р·Р°РЅРѕ " + currentDisplayBooks->Count + " РєРЅРёРі. " + GetFilterDescription();
                 }
+
+                // РџРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РіСЂР°С„РёРєРё СЃ РѕС‚С„РёР»СЊС‚СЂРѕРІР°РЅРЅС‹РјРё РґР°РЅРЅС‹РјРё
+                DrawCharts(baseFilteredBooks);
             }
             else
             {
                 dataGridViewAllBooks->Rows->Clear();
+                currentDisplayBooks->Clear();
                 if (!String::IsNullOrEmpty(activeFilter))
                 {
-                    statusLabel->Text = "Нет книг, соответствующих фильтру: " + GetFilterDescription();
+                    statusLabel->Text = "РќРµС‚ РєРЅРёРі, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёС… С„РёР»СЊС‚СЂСѓ: " + GetFilterDescription();
                 }
+                // РџРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РіСЂР°С„РёРєРё СЃ РїСѓСЃС‚С‹РјРё РґР°РЅРЅС‹РјРё РёР»Рё СЃРѕ РІСЃРµРјРё РєРЅРёРіР°РјРё Р¶Р°РЅСЂР°?
+                DrawCharts(genreFiltered); // РџРѕРєР°Р·С‹РІР°РµРј РІСЃРµ РєРЅРёРіРё Р¶Р°РЅСЂР° РЅР° РіСЂР°С„РёРєР°С…, РЅРѕ С‚Р°Р±Р»РёС†Р° РїСѓСЃС‚Р°
             }
         }
 
-        // Метод копирования выделенных ячеек
+        // РњРµС‚РѕРґ РєРѕРїРёСЂРѕРІР°РЅРёСЏ РІС‹РґРµР»РµРЅРЅС‹С… СЏС‡РµРµРє
         void CopySelectedCells()
         {
             if (dataGridViewAllBooks->SelectedRows->Count > 0 || dataGridViewAllBooks->SelectedCells->Count > 0)
@@ -723,18 +801,18 @@ namespace CSVAnalyzer {
                     if (data != nullptr)
                     {
                         Clipboard::SetDataObject(data);
-                        statusLabel->Text = "Данные скопированы в буфер обмена";
+                        statusLabel->Text = "Р”Р°РЅРЅС‹Рµ СЃРєРѕРїРёСЂРѕРІР°РЅС‹ РІ Р±СѓС„РµСЂ РѕР±РјРµРЅР°";
                     }
                 }
                 catch (Exception^ ex)
                 {
-                    MessageBox::Show("Ошибка при копировании: " + ex->Message, "Ошибка",
+                    MessageBox::Show("РћС€РёР±РєР° РїСЂРё РєРѕРїРёСЂРѕРІР°РЅРёРё: " + ex->Message, "РћС€РёР±РєР°",
                         MessageBoxButtons::OK, MessageBoxIcon::Error);
                 }
             }
             else
             {
-                statusLabel->Text = "Нет выделенных строк для копирования";
+                statusLabel->Text = "РќРµС‚ РІС‹РґРµР»РµРЅРЅС‹С… СЃС‚СЂРѕРє РґР»СЏ РєРѕРїРёСЂРѕРІР°РЅРёСЏ";
             }
         }
 
@@ -744,69 +822,72 @@ namespace CSVAnalyzer {
             {
                 isResizing = true;
 
-                // Сохраняем текущее состояние
                 String^ savedFilter = activeFilter;
                 String^ savedFilterValue = activeFilterValue;
                 int savedActiveChart = activeChart;
 
-                // Сохраняем подсветки
                 List<String^>^ savedAuthors = gcnew List<String^>();
-                for each (String ^ author in highlightedAuthors)
+                for each(String ^ author in highlightedAuthors)
                     savedAuthors->Add(author);
 
                 List<int>^ savedYears = gcnew List<int>();
-                for each (int year in highlightedYears)
+                for each(int year in highlightedYears)
                     savedYears->Add(year);
 
                 List<String^>^ savedPriceRanges = gcnew List<String^>();
-                for each (String ^ range in highlightedPriceRanges)
+                for each(String ^ range in highlightedPriceRanges)
                     savedPriceRanges->Add(range);
 
                 List<String^>^ savedRatingRanges = gcnew List<String^>();
-                for each (String ^ range in highlightedRatingRanges)
+                for each(String ^ range in highlightedRatingRanges)
                     savedRatingRanges->Add(range);
 
                 Book^ savedSelectedBook = selectedBook;
+                int savedSelectedIndex = selectedBookIndex;
 
-                // Перерисовываем графики с новыми размерами
-                List<Book^>^ filtered = FilterBooksByGenre(currentSelectedGenre);
-                DrawCharts(filtered);
+                List<Book^>^ allGenreBooks = FilterBooksByGenre(currentSelectedGenre);
 
-                // Восстанавливаем состояние фильтра
+                // Р•СЃР»Рё РµСЃС‚СЊ Р°РєС‚РёРІРЅС‹Р№ С„РёР»СЊС‚СЂ, РёСЃРїРѕР»СЊР·СѓРµРј РѕС‚С„РёР»СЊС‚СЂРѕРІР°РЅРЅС‹Рµ РґР°РЅРЅС‹Рµ РґР»СЏ РіСЂР°С„РёРєРѕРІ
+                if (!String::IsNullOrEmpty(activeFilter))
+                {
+                    DrawCharts(baseFilteredBooks);
+                }
+                else
+                {
+                    DrawCharts(allGenreBooks);
+                }
+
                 activeFilter = savedFilter;
                 activeFilterValue = savedFilterValue;
                 activeChart = savedActiveChart;
 
-                // Восстанавливаем подсветки
                 highlightedAuthors->Clear();
-                for each (String ^ author in savedAuthors)
+                for each(String ^ author in savedAuthors)
                     highlightedAuthors->Add(author);
 
                 highlightedYears->Clear();
-                for each (int year in savedYears)
+                for each(int year in savedYears)
                     highlightedYears->Add(year);
 
                 highlightedPriceRanges->Clear();
-                for each (String ^ range in savedPriceRanges)
+                for each(String ^ range in savedPriceRanges)
                     highlightedPriceRanges->Add(range);
 
                 highlightedRatingRanges->Clear();
-                for each (String ^ range in savedRatingRanges)
+                for each(String ^ range in savedRatingRanges)
                     highlightedRatingRanges->Add(range);
 
                 selectedBook = savedSelectedBook;
+                selectedBookIndex = savedSelectedIndex;
 
-                // Если был активный фильтр, применяем его
                 if (!String::IsNullOrEmpty(activeFilter))
                 {
                     UpdateFilteredView();
                     HighlightActiveChart(activeChart);
                 }
-                else if (highlightedAuthors->Count > 0 || highlightedYears->Count > 0 ||
-                    highlightedPriceRanges->Count > 0 || highlightedRatingRanges->Count > 0)
+                else
                 {
-                    // Если есть подсветки, перерисовываем графики с ними
-                    DrawCharts(filtered);
+                    RefreshCurrentView();
                 }
 
                 isResizing = false;
@@ -817,17 +898,16 @@ namespace CSVAnalyzer {
         {
             if (isDataLoaded && comboBoxGenre->SelectedItem != nullptr)
             {
-                // Преобразуем русские названия обратно в английские для фильтрации
                 String^ selectedGenre = comboBoxGenre->SelectedItem->ToString();
-                if (selectedGenre == "Художественная")
+                if (selectedGenre == "РҐСѓРґРѕР¶РµСЃС‚РІРµРЅРЅР°СЏ")
                     currentSelectedGenre = "Fiction";
-                else if (selectedGenre == "Нехудожественная")
+                else if (selectedGenre == "РќРµС…СѓРґРѕР¶РµСЃС‚РІРµРЅРЅР°СЏ")
                     currentSelectedGenre = "Non Fiction";
 
-                // Сбрасываем фильтр, подсветки и выделение при смене жанра
                 ClearFilter();
                 ClearHighlights();
                 selectedBook = nullptr;
+                selectedBookIndex = -1;
                 dataGridViewAllBooks->ClearSelection();
                 RefreshCurrentView();
             }
@@ -839,19 +919,26 @@ namespace CSVAnalyzer {
             {
                 String^ selectedMetric = comboBoxMetric->SelectedItem->ToString();
 
-                if (selectedMetric == "По авторам")
+                if (selectedMetric == "РџРѕ Р°РІС‚РѕСЂР°Рј")
                     currentSelectedMetric = "Author";
-                else if (selectedMetric == "По цене")
+                else if (selectedMetric == "РџРѕ С†РµРЅРµ")
                     currentSelectedMetric = "Price";
-                else if (selectedMetric == "По рейтингу")
+                else if (selectedMetric == "РџРѕ СЂРµР№С‚РёРЅРіСѓ")
                     currentSelectedMetric = "Rating";
 
-                // Перерисовываем только 3-й график
                 if (isDataLoaded)
                 {
-                    List<Book^>^ filtered = FilterBooksByGenre(currentSelectedGenre);
+                    // Р”Р»СЏ РіСЂР°С„РёРєРѕРІ РёСЃРїРѕР»СЊР·СѓРµРј С‚РµРєСѓС‰РёРµ РѕС‚С„РёР»СЊС‚СЂРѕРІР°РЅРЅС‹Рµ РґР°РЅРЅС‹Рµ
+                    List<Book^>^ dataForCharts;
+                    if (!String::IsNullOrEmpty(activeFilter))
+                    {
+                        dataForCharts = baseFilteredBooks;
+                    }
+                    else
+                    {
+                        dataForCharts = FilterBooksByGenre(currentSelectedGenre);
+                    }
 
-                    // Очищаем и перерисовываем только 3-й график
                     if (pictureBoxChart3->Image != nullptr)
                     {
                         delete pictureBoxChart3->Image;
@@ -859,7 +946,7 @@ namespace CSVAnalyzer {
                     }
 
                     chart3Regions->Clear();
-                    DrawDistributionChart(filtered);
+                    DrawDistributionChart(dataForCharts);
                 }
             }
         }
@@ -868,33 +955,67 @@ namespace CSVAnalyzer {
         {
             if (String::IsNullOrEmpty(currentSelectedGenre)) return;
 
-            List<Book^>^ filtered = FilterBooksByGenre(currentSelectedGenre);
+            List<Book^>^ genreFiltered = FilterBooksByGenre(currentSelectedGenre);
+
+            // РЎРѕС…СЂР°РЅСЏРµРј Р±Р°Р·РѕРІС‹Р№ СЃРїРёСЃРѕРє Р±РµР· СЃРѕСЂС‚РёСЂРѕРІРєРё
+            baseFilteredBooks->Clear();
+            for each(Book ^ book in genreFiltered)
+            {
+                baseFilteredBooks->Add(book);
+            }
+
+            // РЎРѕСЂС‚РёСЂСѓРµРј РїРѕ СЂРµР№С‚РёРЅРіСѓ РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
+            array<Book^>^ sorted = genreFiltered->ToArray();
+            Array::Sort(sorted, gcnew Comparison<Book^>(&MyForm::CompareBooksByRating));
+
+            isProgrammaticSelection = true;
+
+            dataGridViewAllBooks->Rows->Clear();
             currentDisplayBooks->Clear();
-            for each (Book ^ book in filtered)
+
+            for (int i = 0; i < sorted->Length; i++)
             {
+                Book^ book = sorted[i];
                 currentDisplayBooks->Add(book);
+
+                String^ ratingStr = book->UserRating.ToString("F1", CultureInfo::InvariantCulture);
+
+                dataGridViewAllBooks->Rows->Add(
+                    (i + 1).ToString(),
+                    book->Name,
+                    book->Author,
+                    ratingStr,
+                    "$" + book->Price.ToString("F2"),
+                    book->Year.ToString()
+                );
             }
 
-            if (filtered->Count > 0)
+            dataGridViewAllBooks->AutoResizeColumns(DataGridViewAutoSizeColumnsMode::DisplayedCells);
+
+            // Р’РѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІС‹РґРµР»РµРЅРёРµ, РµСЃР»Рё Р±С‹Р»Р° РІС‹Р±СЂР°РЅР° РєРЅРёРіР°
+            if (selectedBookIndex >= 0 && selectedBookIndex < currentDisplayBooks->Count &&
+                currentDisplayBooks[selectedBookIndex] == selectedBook)
             {
-                array<Book^>^ sortedByRating = filtered->ToArray();
-                Array::Sort(sortedByRating, gcnew Comparison<Book^>(&MyForm::CompareBooksByRating));
-
-                isProgrammaticSelection = true;
-                UpdateAllBooksGrid(sortedByRating);
-                isProgrammaticSelection = false;
-
-                DrawCharts(filtered);
-
-                statusLabel->Text = "Показано " + filtered->Count + " книг в жанре \"" +
-                    (currentSelectedGenre == "Fiction" ? "Художественная" : "Нехудожественная") + "\"";
+                dataGridViewAllBooks->Rows[selectedBookIndex]->Selected = true;
             }
+            else
+            {
+                selectedBook = nullptr;
+                selectedBookIndex = -1;
+            }
+
+            isProgrammaticSelection = false;
+
+            DrawCharts(genreFiltered);
+
+            statusLabel->Text = "РџРѕРєР°Р·Р°РЅРѕ " + genreFiltered->Count + " РєРЅРёРі РІ Р¶Р°РЅСЂРµ \"" +
+                (currentSelectedGenre == "Fiction" ? "РҐСѓРґРѕР¶РµСЃС‚РІРµРЅРЅР°СЏ" : "РќРµС…СѓРґРѕР¶РµСЃС‚РІРµРЅРЅР°СЏ") + "\"";
         }
 
         List<Book^>^ FilterBooksByGenre(String^ genre)
         {
             List<Book^>^ filtered = gcnew List<Book^>();
-            for each (Book ^ book in books)
+            for each(Book ^ book in books)
             {
                 if (book->Genre == genre)
                 {
@@ -907,8 +1028,8 @@ namespace CSVAnalyzer {
         System::Void buttonLoadFile_Click(System::Object^ sender, System::EventArgs^ e)
         {
             System::Windows::Forms::OpenFileDialog^ openFileDialog = gcnew System::Windows::Forms::OpenFileDialog();
-            openFileDialog->Title = "Выберите CSV файл";
-            openFileDialog->Filter = "CSV файлы (*.csv)|*.csv|Все файлы (*.*)|*.*";
+            openFileDialog->Title = "Р’С‹Р±РµСЂРёС‚Рµ CSV С„Р°Р№Р»";
+            openFileDialog->Filter = "CSV С„Р°Р№Р»С‹ (*.csv)|*.csv|Р’СЃРµ С„Р°Р№Р»С‹ (*.*)|*.*";
             openFileDialog->FilterIndex = 1;
             openFileDialog->RestoreDirectory = true;
 
@@ -924,19 +1045,19 @@ namespace CSVAnalyzer {
             try {
                 if (!File::Exists(filename))
                 {
-                    System::Windows::Forms::MessageBox::Show("Файл не найден: " + filename, "Ошибка",
+                    System::Windows::Forms::MessageBox::Show("Р¤Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ: " + filename, "РћС€РёР±РєР°",
                         System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
                     return;
                 }
 
-                // Очищаем предыдущие данные
                 books->Clear();
                 currentDisplayBooks->Clear();
+                baseFilteredBooks->Clear();
                 dataGridViewAllBooks->Rows->Clear();
                 dataGridViewAllBooks->ClearSelection();
                 selectedBook = nullptr;
+                selectedBookIndex = -1;
 
-                // Очищаем изображения и освобождаем ресурсы
                 if (pictureBoxChart1->Image != nullptr)
                 {
                     delete pictureBoxChart1->Image;
@@ -953,13 +1074,11 @@ namespace CSVAnalyzer {
                     pictureBoxChart3->Image = nullptr;
                 }
 
-                // Очищаем области кликов и подсветки
                 chart1Regions->Clear();
                 chart2Regions->Clear();
                 chart3Regions->Clear();
                 ClearHighlights();
 
-                // Принудительно вызываем сборщик мусора для освобождения ресурсов
                 GC::Collect();
                 GC::WaitForPendingFinalizers();
 
@@ -969,12 +1088,11 @@ namespace CSVAnalyzer {
                 buttonClearFilter->Enabled = false;
                 isDataLoaded = false;
 
-                statusLabel->Text = "Загрузка файла: " + Path::GetFileName(filename) + "...";
+                statusLabel->Text = "Р—Р°РіСЂСѓР·РєР° С„Р°Р№Р»Р°: " + Path::GetFileName(filename) + "...";
                 System::Windows::Forms::Application::DoEvents();
 
                 array<String^>^ lines = File::ReadAllLines(filename);
 
-                // Устанавливаем культуру для корректного парсинга чисел с точкой
                 CultureInfo^ culture = gcnew CultureInfo("en-US");
 
                 int validBooks = 0;
@@ -993,13 +1111,13 @@ namespace CSVAnalyzer {
 
                     if (i % 100 == 0)
                     {
-                        statusLabel->Text = "Загрузка: загружено " + validBooks + " книг...";
+                        statusLabel->Text = "Р—Р°РіСЂСѓР·РєР°: Р·Р°РіСЂСѓР¶РµРЅРѕ " + validBooks + " РєРЅРёРі...";
                         System::Windows::Forms::Application::DoEvents();
                     }
                 }
 
-                this->Text = "Анализатор CSV - Книжные бестселлеры Amazon 2009-2019 [" + Path::GetFileName(filename) + "]";
-                statusLabel->Text = "Загружено " + books->Count + " книг из файла " + Path::GetFileName(filename);
+                this->Text = "РђРЅР°Р»РёР·Р°С‚РѕСЂ CSV - РљРЅРёР¶РЅС‹Рµ Р±РµСЃС‚СЃРµР»Р»РµСЂС‹ Amazon 2009-2019 [" + Path::GetFileName(filename) + "]";
+                statusLabel->Text = "Р—Р°РіСЂСѓР¶РµРЅРѕ " + books->Count + " РєРЅРёРі РёР· С„Р°Р№Р»Р° " + Path::GetFileName(filename);
 
                 if (books->Count > 0)
                 {
@@ -1012,14 +1130,14 @@ namespace CSVAnalyzer {
                 }
                 else
                 {
-                    System::Windows::Forms::MessageBox::Show("В файле не найдено валидных книг.", "Предупреждение",
+                    System::Windows::Forms::MessageBox::Show("Р’ С„Р°Р№Р»Рµ РЅРµ РЅР°Р№РґРµРЅРѕ РІР°Р»РёРґРЅС‹С… РєРЅРёРі.", "РџСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ",
                         System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Warning);
                 }
             }
             catch (Exception^ ex) {
-                System::Windows::Forms::MessageBox::Show("Ошибка загрузки CSV: " + ex->Message, "Ошибка",
+                System::Windows::Forms::MessageBox::Show("РћС€РёР±РєР° Р·Р°РіСЂСѓР·РєРё CSV: " + ex->Message, "РћС€РёР±РєР°",
                     System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
-                statusLabel->Text = "Ошибка загрузки файла";
+                statusLabel->Text = "РћС€РёР±РєР° Р·Р°РіСЂСѓР·РєРё С„Р°Р№Р»Р°";
             }
         }
 
@@ -1058,7 +1176,6 @@ namespace CSVAnalyzer {
                     book->Name = fields[0]->Trim('"');
                     book->Author = fields[1]->Trim('"');
 
-                    // Парсим рейтинг с учетом культуры (en-US для точки)
                     String^ ratingStr = fields[2]->Trim();
                     double rating;
                     if (Double::TryParse(ratingStr, NumberStyles::Any, culture, rating))
@@ -1067,14 +1184,16 @@ namespace CSVAnalyzer {
                     }
                     else
                     {
-                        // Пробуем парсить с текущей культурой как запасной вариант
-                        if (!Double::TryParse(ratingStr, rating))
+                        if (!Double::TryParse(ratingStr, NumberStyles::Any, CultureInfo::InvariantCulture, rating))
                         {
                             book->UserRating = 0.0;
                         }
+                        else
+                        {
+                            book->UserRating = rating;
+                        }
                     }
 
-                    // Парсим количество отзывов
                     String^ reviewsStr = fields[3]->Trim();
                     int reviews;
                     if (Int32::TryParse(reviewsStr, reviews))
@@ -1082,7 +1201,6 @@ namespace CSVAnalyzer {
                     else
                         book->Reviews = 0;
 
-                    // Парсим цену с учетом культуры (en-US для точки)
                     String^ priceStr = fields[4]->Trim();
                     double price;
                     if (Double::TryParse(priceStr, NumberStyles::Any, culture, price))
@@ -1091,14 +1209,16 @@ namespace CSVAnalyzer {
                     }
                     else
                     {
-                        // Пробуем парсить с текущей культурой как запасной вариант
-                        if (!Double::TryParse(priceStr, price))
+                        if (!Double::TryParse(priceStr, NumberStyles::Any, CultureInfo::InvariantCulture, price))
                         {
                             book->Price = 0.0;
                         }
+                        else
+                        {
+                            book->Price = price;
+                        }
                     }
 
-                    // Парсим год
                     String^ yearStr = fields[5]->Trim();
                     int year;
                     if (Int32::TryParse(yearStr, year))
@@ -1112,7 +1232,6 @@ namespace CSVAnalyzer {
                 }
             }
             catch (Exception^) {
-                // Игнорируем ошибки парсинга отдельных строк
             }
 
             return nullptr;
@@ -1123,51 +1242,19 @@ namespace CSVAnalyzer {
             ClearFilter();
             ClearHighlights();
             selectedBook = nullptr;
+            selectedBookIndex = -1;
             dataGridViewAllBooks->ClearSelection();
             RefreshCurrentView();
         }
 
-        void UpdateAllBooksGrid(array<Book^>^ sorted)
+        void DrawCharts(List<Book^>^ dataForCharts)
         {
-            dataGridViewAllBooks->Columns->Clear();
-            dataGridViewAllBooks->Rows->Clear();
-
-            dataGridViewAllBooks->ColumnCount = 6;
-            dataGridViewAllBooks->Columns[0]->Name = "№";
-            dataGridViewAllBooks->Columns[0]->Width = 40;
-            dataGridViewAllBooks->Columns[1]->Name = "Название";
-            dataGridViewAllBooks->Columns[1]->Width = 250;
-            dataGridViewAllBooks->Columns[2]->Name = "Автор";
-            dataGridViewAllBooks->Columns[2]->Width = 180;
-            dataGridViewAllBooks->Columns[3]->Name = "Рейтинг";
-            dataGridViewAllBooks->Columns[3]->Width = 60;
-            dataGridViewAllBooks->Columns[4]->Name = "Цена";
-            dataGridViewAllBooks->Columns[4]->Width = 60;
-            dataGridViewAllBooks->Columns[5]->Name = "Год";
-            dataGridViewAllBooks->Columns[5]->Width = 50;
-
-            for (int i = 0; i < sorted->Length; i++)
-            {
-                Book^ book = sorted[i];
-                dataGridViewAllBooks->Rows->Add(
-                    (i + 1).ToString(),
-                    book->Name,
-                    book->Author,
-                    book->UserRating.ToString("F1"),
-                    "$" + book->Price.ToString("F2"),
-                    book->Year.ToString()
-                );
-            }
+            DrawRatingChart(dataForCharts);
+            DrawReviewsChart(dataForCharts);
+            DrawDistributionChart(dataForCharts);
         }
 
-        void DrawCharts(List<Book^>^ filtered)
-        {
-            DrawRatingChart(filtered);
-            DrawReviewsChart(filtered);
-            DrawDistributionChart(filtered);
-        }
-
-        void DrawRatingChart(List<Book^>^ filtered)
+        void DrawRatingChart(List<Book^>^ dataForCharts)
         {
             if (pictureBoxChart1->Width <= 0 || pictureBoxChart1->Height <= 0)
                 return;
@@ -1177,7 +1264,7 @@ namespace CSVAnalyzer {
             Dictionary<int, double>^ yearRatingSum = gcnew Dictionary<int, double>();
             Dictionary<int, int>^ yearRatingCount = gcnew Dictionary<int, int>();
 
-            for each (Book ^ book in filtered)
+            for each(Book ^ book in dataForCharts)
             {
                 if (!yearRatingSum->ContainsKey(book->Year))
                 {
@@ -1195,9 +1282,8 @@ namespace CSVAnalyzer {
             g->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
 
             DrawLineChartWithRegions(g, bmp->Width, bmp->Height, yearRatingSum, yearRatingCount,
-                "Средний рейтинг по годам", System::Drawing::Color::Blue, 0, 5, chart1Regions);
+                "РЎСЂРµРґРЅРёР№ СЂРµР№С‚РёРЅРі РїРѕ РіРѕРґР°Рј", System::Drawing::Color::Blue, 0, 5, chart1Regions);
 
-            // Освобождаем предыдущее изображение
             if (pictureBoxChart1->Image != nullptr)
                 delete pictureBoxChart1->Image;
 
@@ -1205,7 +1291,7 @@ namespace CSVAnalyzer {
             delete g;
         }
 
-        void DrawReviewsChart(List<Book^>^ filtered)
+        void DrawReviewsChart(List<Book^>^ dataForCharts)
         {
             if (pictureBoxChart2->Width <= 0 || pictureBoxChart2->Height <= 0)
                 return;
@@ -1214,7 +1300,7 @@ namespace CSVAnalyzer {
 
             Dictionary<int, int>^ yearReviews = gcnew Dictionary<int, int>();
 
-            for each (Book ^ book in filtered)
+            for each(Book ^ book in dataForCharts)
             {
                 if (!yearReviews->ContainsKey(book->Year))
                 {
@@ -1230,9 +1316,8 @@ namespace CSVAnalyzer {
             g->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
 
             DrawBarChartWithRegions(g, bmp->Width, bmp->Height, yearReviews,
-                "Общее количество отзывов по годам", System::Drawing::Color::Orange, chart2Regions);
+                "РћР±С‰РµРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РѕС‚Р·С‹РІРѕРІ РїРѕ РіРѕРґР°Рј", System::Drawing::Color::Orange, chart2Regions);
 
-            // Освобождаем предыдущее изображение
             if (pictureBoxChart2->Image != nullptr)
                 delete pictureBoxChart2->Image;
 
@@ -1240,7 +1325,7 @@ namespace CSVAnalyzer {
             delete g;
         }
 
-        void DrawDistributionChart(List<Book^>^ filtered)
+        void DrawDistributionChart(List<Book^>^ dataForCharts)
         {
             if (pictureBoxChart3->Width <= 0 || pictureBoxChart3->Height <= 0)
                 return;
@@ -1256,21 +1341,20 @@ namespace CSVAnalyzer {
 
             if (currentSelectedMetric == "Author")
             {
-                title = "Топ-10 авторов по количеству книг";
-                DrawAuthorDistributionWithRegions(g, bmp->Width, bmp->Height, filtered, title, chart3Regions);
+                title = "РўРѕРї-10 Р°РІС‚РѕСЂРѕРІ РїРѕ РєРѕР»РёС‡РµСЃС‚РІСѓ РєРЅРёРі";
+                DrawAuthorDistributionWithRegions(g, bmp->Width, bmp->Height, dataForCharts, title, chart3Regions);
             }
             else if (currentSelectedMetric == "Price")
             {
-                title = "Распределение по цене";
-                DrawPriceDistributionWithRegions(g, bmp->Width, bmp->Height, filtered, title, chart3Regions);
+                title = "Р Р°СЃРїСЂРµРґРµР»РµРЅРёРµ РїРѕ С†РµРЅРµ ($)";
+                DrawPriceDistributionWithRegions(g, bmp->Width, bmp->Height, dataForCharts, title, chart3Regions);
             }
             else if (currentSelectedMetric == "Rating")
             {
-                title = "Распределение по рейтингу";
-                DrawRatingDistributionWithRegions(g, bmp->Width, bmp->Height, filtered, title, chart3Regions);
+                title = "Р Р°СЃРїСЂРµРґРµР»РµРЅРёРµ РїРѕ СЂРµР№С‚РёРЅРіСѓ";
+                DrawRatingDistributionWithRegions(g, bmp->Width, bmp->Height, dataForCharts, title, chart3Regions);
             }
 
-            // Освобождаем предыдущее изображение
             if (pictureBoxChart3->Image != nullptr)
                 delete pictureBoxChart3->Image;
 
@@ -1279,11 +1363,11 @@ namespace CSVAnalyzer {
         }
 
         void DrawAuthorDistributionWithRegions(System::Drawing::Graphics^ g, int width, int height,
-            List<Book^>^ filtered, String^ title, List<ChartClickRegion^>^ regions)
+            List<Book^>^ dataForCharts, String^ title, List<ChartClickRegion^>^ regions)
         {
             Dictionary<String^, int>^ authorCount = gcnew Dictionary<String^, int>();
 
-            for each (Book ^ book in filtered)
+            for each(Book ^ book in dataForCharts)
             {
                 if (!authorCount->ContainsKey(book->Author))
                 {
@@ -1292,26 +1376,23 @@ namespace CSVAnalyzer {
                 authorCount[book->Author]++;
             }
 
-            // Сортируем авторов по количеству книг
             array<KeyValuePair<String^, int>>^ authors = gcnew array<KeyValuePair<String^, int>>(authorCount->Count);
             int index = 0;
-            for each (KeyValuePair<String^, int> pair in authorCount)
+            for each(KeyValuePair<String^, int> pair in authorCount)
             {
                 authors[index++] = pair;
             }
 
-            // Используем отдельный класс для сравнения вместо лямбды
             Array::Sort(authors, gcnew Comparison<KeyValuePair<String^, int>>(&AuthorComparer::Compare));
 
-            // Берем топ-10 авторов
             int count = Math::Min(10, authors->Length);
 
             DrawBarChartWithLabelsAndRegions(g, width, height, authors, count, title,
-                System::Drawing::Color::Purple, "Количество книг", "Author", regions);
+                System::Drawing::Color::Purple, "РљРѕР»РёС‡РµСЃС‚РІРѕ РєРЅРёРі", "Author", regions);
         }
 
         void DrawPriceDistributionWithRegions(System::Drawing::Graphics^ g, int width, int height,
-            List<Book^>^ filtered, String^ title, List<ChartClickRegion^>^ regions)
+            List<Book^>^ dataForCharts, String^ title, List<ChartClickRegion^>^ regions)
         {
             Dictionary<String^, int>^ priceRanges = gcnew Dictionary<String^, int>();
             priceRanges->Add("0-10$", 0);
@@ -1320,7 +1401,7 @@ namespace CSVAnalyzer {
             priceRanges->Add("30-40$", 0);
             priceRanges->Add("40$+", 0);
 
-            for each (Book ^ book in filtered)
+            for each(Book ^ book in dataForCharts)
             {
                 if (book->Price < 10)
                     priceRanges["0-10$"]++;
@@ -1336,17 +1417,17 @@ namespace CSVAnalyzer {
 
             array<KeyValuePair<String^, int>>^ ranges = gcnew array<KeyValuePair<String^, int>>(priceRanges->Count);
             int index = 0;
-            for each (KeyValuePair<String^, int> pair in priceRanges)
+            for each(KeyValuePair<String^, int> pair in priceRanges)
             {
                 ranges[index++] = pair;
             }
 
             DrawBarChartWithLabelsAndRegions(g, width, height, ranges, ranges->Length, title,
-                System::Drawing::Color::Teal, "Количество книг", "PriceRange", regions);
+                System::Drawing::Color::Teal, "РљРѕР»РёС‡РµСЃС‚РІРѕ РєРЅРёРі", "PriceRange", regions);
         }
 
         void DrawRatingDistributionWithRegions(System::Drawing::Graphics^ g, int width, int height,
-            List<Book^>^ filtered, String^ title, List<ChartClickRegion^>^ regions)
+            List<Book^>^ dataForCharts, String^ title, List<ChartClickRegion^>^ regions)
         {
             Dictionary<String^, int>^ ratingRanges = gcnew Dictionary<String^, int>();
             ratingRanges->Add("0-1", 0);
@@ -1355,7 +1436,7 @@ namespace CSVAnalyzer {
             ratingRanges->Add("3-4", 0);
             ratingRanges->Add("4-5", 0);
 
-            for each (Book ^ book in filtered)
+            for each(Book ^ book in dataForCharts)
             {
                 if (book->UserRating < 1)
                     ratingRanges["0-1"]++;
@@ -1371,13 +1452,13 @@ namespace CSVAnalyzer {
 
             array<KeyValuePair<String^, int>>^ ranges = gcnew array<KeyValuePair<String^, int>>(ratingRanges->Count);
             int index = 0;
-            for each (KeyValuePair<String^, int> pair in ratingRanges)
+            for each(KeyValuePair<String^, int> pair in ratingRanges)
             {
                 ranges[index++] = pair;
             }
 
             DrawBarChartWithLabelsAndRegions(g, width, height, ranges, ranges->Length, title,
-                System::Drawing::Color::DarkOrange, "Количество книг", "RatingRange", regions);
+                System::Drawing::Color::DarkOrange, "РљРѕР»РёС‡РµСЃС‚РІРѕ РєРЅРёРі", "RatingRange", regions);
         }
 
         void DrawLineChartWithRegions(System::Drawing::Graphics^ g, int width, int height,
@@ -1393,14 +1474,13 @@ namespace CSVAnalyzer {
             g->DrawLine(blackPen, margin, margin + 20, margin, height - margin);
             g->DrawLine(blackPen, margin, height - margin, width - margin, height - margin);
 
-            // Заголовок
-            System::Drawing::Font^ titleFont = gcnew System::Drawing::Font("Arial", 10, System::Drawing::FontStyle::Bold);
+            System::Drawing::Font^ titleFont = gcnew System::Drawing::Font("Segoe UI", 9, System::Drawing::FontStyle::Bold);
             g->DrawString(title, titleFont, System::Drawing::Brushes::Black,
                 width / 2 - 100, 5);
 
             int minYear = Int32::MaxValue;
             int maxYear = Int32::MinValue;
-            for each (int year in sum->Keys)
+            for each(int year in sum->Keys)
             {
                 if (year < minYear) minYear = year;
                 if (year > maxYear) maxYear = year;
@@ -1417,7 +1497,7 @@ namespace CSVAnalyzer {
             if (yearRange == 0) yearRange = 1;
 
             double maxValue = 0;
-            for each (int year in sum->Keys)
+            for each(int year in sum->Keys)
             {
                 double avgValue = sum[year] / count[year];
                 if (avgValue > maxValue) maxValue = avgValue;
@@ -1428,8 +1508,7 @@ namespace CSVAnalyzer {
 
             if (maxValue == 0) maxValue = 1;
 
-            // Подпись оси Y
-            System::Drawing::Font^ axisFont = gcnew System::Drawing::Font("Arial", 8);
+            System::Drawing::Font^ axisFont = gcnew System::Drawing::Font("Segoe UI", 7);
             for (int i = 0; i <= 5; i++)
             {
                 int y = height - margin - (int)((double)i / 5 * chartHeight);
@@ -1453,9 +1532,9 @@ namespace CSVAnalyzer {
             System::Drawing::Pen^ chartPen = gcnew System::Drawing::Pen(color, 2);
             int prevX = -1, prevY = -1;
 
-            int pointRadius = 12; // Увеличили радиус для лучшей кликабельности
+            int pointRadius = 12;
 
-            for each (int year in years)
+            for each(int year in years)
             {
                 double avgValue = sum[year] / count[year];
 
@@ -1465,17 +1544,14 @@ namespace CSVAnalyzer {
                 x = Math::Max(margin, Math::Min(width - margin, x));
                 y = Math::Max(margin + 20, Math::Min(height - margin, y));
 
-                // Определяем цвет точки (подсвечиваем, если год выделен)
                 Color pointColor = color;
                 if (highlightedYears->Contains(year))
                 {
                     pointColor = Color::Red;
                 }
 
-                // Рисуем точку
                 g->FillEllipse(gcnew System::Drawing::SolidBrush(pointColor), x - pointRadius / 2, y - pointRadius / 2, pointRadius, pointRadius);
 
-                // Добавляем область для клика (увеличили зону клика)
                 ChartClickRegion^ region = gcnew ChartClickRegion();
                 region->Type = "Year";
                 region->Value = year.ToString();
@@ -1490,10 +1566,9 @@ namespace CSVAnalyzer {
                 prevX = x;
                 prevY = y;
 
-                // Подпись года (более компактная, без наложения)
                 if (years->Length < 10 || (year % 2 == 0))
                 {
-                    System::Drawing::Font^ yearFont = gcnew System::Drawing::Font("Arial", 7);
+                    System::Drawing::Font^ yearFont = gcnew System::Drawing::Font("Segoe UI", 6);
                     g->DrawString(year.ToString(), yearFont, System::Drawing::Brushes::Black, x - 10, height - margin + 5);
                     delete yearFont;
                 }
@@ -1518,8 +1593,7 @@ namespace CSVAnalyzer {
             g->DrawLine(blackPen, margin, margin + 20, margin, height - margin);
             g->DrawLine(blackPen, margin, height - margin, width - margin, height - margin);
 
-            // Заголовок
-            System::Drawing::Font^ titleFont = gcnew System::Drawing::Font("Arial", 10, System::Drawing::FontStyle::Bold);
+            System::Drawing::Font^ titleFont = gcnew System::Drawing::Font("Segoe UI", 9, System::Drawing::FontStyle::Bold);
             g->DrawString(title, titleFont, System::Drawing::Brushes::Black,
                 width / 2 - 100, 5);
 
@@ -1527,7 +1601,7 @@ namespace CSVAnalyzer {
             int maxYear = Int32::MinValue;
             int maxValue = 0;
 
-            for each (int year in data->Keys)
+            for each(int year in data->Keys)
             {
                 if (year < minYear) minYear = year;
                 if (year > maxYear) maxYear = year;
@@ -1546,8 +1620,7 @@ namespace CSVAnalyzer {
 
             if (maxValue == 0) maxValue = 1;
 
-            // Подпись оси Y
-            System::Drawing::Font^ axisFont = gcnew System::Drawing::Font("Arial", 8);
+            System::Drawing::Font^ axisFont = gcnew System::Drawing::Font("Segoe UI", 7);
             for (int i = 0; i <= 5; i++)
             {
                 int y = height - margin - (int)((double)i / 5 * chartHeight);
@@ -1570,7 +1643,7 @@ namespace CSVAnalyzer {
 
             int barWidth = 20;
 
-            for each (int year in years)
+            for each(int year in years)
             {
                 int x = margin + (int)((year - minYear) / yearRange * chartWidth) - barWidth / 2;
                 int barHeight = (int)((double)data[year] / maxValue * chartHeight);
@@ -1579,7 +1652,6 @@ namespace CSVAnalyzer {
 
                 if (barHeight > 0)
                 {
-                    // Определяем цвет столбца (подсвечиваем, если год выделен)
                     Color barColor = color;
                     if (highlightedYears->Contains(year))
                     {
@@ -1597,7 +1669,6 @@ namespace CSVAnalyzer {
                     g->DrawRectangle(System::Drawing::Pens::DarkGray, barRect);
                     delete brush;
 
-                    // Добавляем область для клика (увеличили зону клика на 10 пикселей по высоте)
                     System::Drawing::Rectangle clickRect = System::Drawing::Rectangle(
                         x - 5,
                         height - margin - barHeight - 5,
@@ -1610,10 +1681,9 @@ namespace CSVAnalyzer {
                     regions->Add(region);
                 }
 
-                // Подпись года (более компактная, без наложения)
                 if (years->Length < 10 || (year % 2 == 0))
                 {
-                    System::Drawing::Font^ yearFont = gcnew System::Drawing::Font("Arial", 7);
+                    System::Drawing::Font^ yearFont = gcnew System::Drawing::Font("Segoe UI", 6);
                     g->DrawString(year.ToString(), yearFont, System::Drawing::Brushes::Black, x, height - margin + 5);
                     delete yearFont;
                 }
@@ -1635,17 +1705,14 @@ namespace CSVAnalyzer {
             int chartWidth = width - 2 * margin;
             int chartHeight = height - 2 * margin - 40;
 
-            // Рисуем оси
             System::Drawing::Pen^ blackPen = gcnew System::Drawing::Pen(System::Drawing::Color::Black, 1);
             g->DrawLine(blackPen, margin, margin + 20, margin, height - margin);
             g->DrawLine(blackPen, margin, height - margin, width - margin, height - margin);
 
-            // Заголовок
-            System::Drawing::Font^ titleFont = gcnew System::Drawing::Font("Arial", 10, System::Drawing::FontStyle::Bold);
+            System::Drawing::Font^ titleFont = gcnew System::Drawing::Font("Segoe UI", 9, System::Drawing::FontStyle::Bold);
             g->DrawString(title, titleFont, System::Drawing::Brushes::Black,
                 width / 2 - 100, 5);
 
-            // Находим максимальное значение
             int maxValue = 0;
             for (int i = 0; i < count; i++)
             {
@@ -1654,11 +1721,10 @@ namespace CSVAnalyzer {
             }
             if (maxValue == 0) maxValue = 1;
 
-            // Рисуем сетку
             System::Drawing::Pen^ gridPen = gcnew System::Drawing::Pen(System::Drawing::Color::LightGray, 1);
             gridPen->DashStyle = System::Drawing::Drawing2D::DashStyle::Dash;
 
-            System::Drawing::Font^ axisFont = gcnew System::Drawing::Font("Arial", 8);
+            System::Drawing::Font^ axisFont = gcnew System::Drawing::Font("Segoe UI", 7);
 
             for (int i = 0; i <= 5; i++)
             {
@@ -1669,7 +1735,6 @@ namespace CSVAnalyzer {
                 g->DrawString(value.ToString(), axisFont, System::Drawing::Brushes::Black, margin - 40, y - 8);
             }
 
-            // Рисуем столбцы
             int barWidth = (chartWidth - 20) / count;
             if (barWidth > 50) barWidth = 50;
 
@@ -1678,7 +1743,6 @@ namespace CSVAnalyzer {
                 int x = margin + 20 + i * (barWidth + 5);
                 int barHeight = (int)((double)data[i].Value / maxValue * chartHeight);
 
-                // Определяем цвет столбца (подсвечиваем, если автор/диапазон выделены)
                 Color barColor = color;
 
                 if (regionType == "Author" && highlightedAuthors->Contains(data[i].Key))
@@ -1707,7 +1771,6 @@ namespace CSVAnalyzer {
                     g->DrawRectangle(System::Drawing::Pens::DarkGray, barRect);
                     delete brush;
 
-                    // Добавляем область для клика (увеличили зону клика)
                     System::Drawing::Rectangle clickRect = System::Drawing::Rectangle(
                         x - 5,
                         height - margin - barHeight - 5,
@@ -1719,7 +1782,6 @@ namespace CSVAnalyzer {
                     region->Bounds = clickRect;
                     regions->Add(region);
 
-                    // Подпись значения над столбцом (только для топ-3, чтобы избежать наложения)
                     if (i < 3 || data[i].Value > maxValue * 0.7)
                     {
                         g->DrawString(data[i].Value.ToString(), axisFont, System::Drawing::Brushes::Black,
@@ -1727,10 +1789,9 @@ namespace CSVAnalyzer {
                     }
                 }
 
-                // Подпись под столбцом (обрезаем длинные названия)
                 String^ label = data[i].Key;
                 if (label->Length > 10)
-                    label = label->Substring(0, 8) + "…";
+                    label = label->Substring(0, 8) + "...";
 
                 g->DrawString(label, axisFont, System::Drawing::Brushes::Black, x, height - margin + 5);
             }
