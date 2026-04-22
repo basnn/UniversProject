@@ -680,16 +680,7 @@ namespace CSVAnalyzer {
             if (String::IsNullOrEmpty(currentSelectedGenre)) return;
 
             List<Book^>^ baseFiltered = FilterBooksByGenre(currentSelectedGenre);
-
-            // Сохраняем базовый список без сортировки
-            baseFilteredBooks->Clear();
-            for each(Book ^ book in baseFiltered)
-            {
-                baseFilteredBooks->Add(book);
-            }
-
-            currentDisplayBooks->Clear();
-            bookIndexMap->Clear();
+            List<Book^>^ filtered = gcnew List<Book^>();
 
             if (activeFilter == "Year")
             {
@@ -697,7 +688,7 @@ namespace CSVAnalyzer {
                 for each(Book ^ book in baseFiltered)
                 {
                     if (book->Year == year)
-                        currentDisplayBooks->Add(book);
+                        filtered->Add(book);
                 }
             }
             else if (activeFilter == "Author")
@@ -705,7 +696,7 @@ namespace CSVAnalyzer {
                 for each(Book ^ book in baseFiltered)
                 {
                     if (book->Author == activeFilterValue)
-                        currentDisplayBooks->Add(book);
+                        filtered->Add(book);
                 }
             }
             else if (activeFilter == "PriceRange")
@@ -713,15 +704,15 @@ namespace CSVAnalyzer {
                 for each(Book ^ book in baseFiltered)
                 {
                     if (activeFilterValue == "0-10$" && book->Price < 10)
-                        currentDisplayBooks->Add(book);
+                        filtered->Add(book);
                     else if (activeFilterValue == "10-20$" && book->Price >= 10 && book->Price < 20)
-                        currentDisplayBooks->Add(book);
+                        filtered->Add(book);
                     else if (activeFilterValue == "20-30$" && book->Price >= 20 && book->Price < 30)
-                        currentDisplayBooks->Add(book);
+                        filtered->Add(book);
                     else if (activeFilterValue == "30-40$" && book->Price >= 30 && book->Price < 40)
-                        currentDisplayBooks->Add(book);
+                        filtered->Add(book);
                     else if (activeFilterValue == "40$+" && book->Price >= 40)
-                        currentDisplayBooks->Add(book);
+                        filtered->Add(book);
                 }
             }
             else if (activeFilter == "RatingRange")
@@ -729,34 +720,69 @@ namespace CSVAnalyzer {
                 for each(Book ^ book in baseFiltered)
                 {
                     if (activeFilterValue == "0-1" && book->UserRating < 1)
-                        currentDisplayBooks->Add(book);
+                        filtered->Add(book);
                     else if (activeFilterValue == "1-2" && book->UserRating >= 1 && book->UserRating < 2)
-                        currentDisplayBooks->Add(book);
+                        filtered->Add(book);
                     else if (activeFilterValue == "2-3" && book->UserRating >= 2 && book->UserRating < 3)
-                        currentDisplayBooks->Add(book);
+                        filtered->Add(book);
                     else if (activeFilterValue == "3-4" && book->UserRating >= 3 && book->UserRating < 4)
-                        currentDisplayBooks->Add(book);
+                        filtered->Add(book);
                     else if (activeFilterValue == "4-5" && book->UserRating >= 4)
-                        currentDisplayBooks->Add(book);
-                }
-            }
-            else
-            {
-                for each(Book ^ book in baseFiltered)
-                {
-                    currentDisplayBooks->Add(book);
+                        filtered->Add(book);
                 }
             }
 
-            if (currentDisplayBooks->Count > 0)
+            if (filtered->Count > 0)
             {
-                // Сортируем по рейтингу для отображения
-                array<Book^>^ sorted = currentDisplayBooks->ToArray();
+                array<Book^>^ sorted = filtered->ToArray();
                 Array::Sort(sorted, gcnew Comparison<Book^>(&MyForm::CompareBooksByRating));
 
-                // Очищаем и заполняем таблицу
                 dataGridViewAllBooks->Rows->Clear();
                 currentDisplayBooks->Clear();
+
+                // Настройка колонок - 7 колонок
+                dataGridViewAllBooks->ColumnCount = 7;
+
+                dataGridViewAllBooks->Columns[0]->Name = "№";
+                dataGridViewAllBooks->Columns[0]->MinimumWidth = 40;
+                dataGridViewAllBooks->Columns[0]->FillWeight = 5;
+                dataGridViewAllBooks->Columns[0]->SortMode = DataGridViewColumnSortMode::NotSortable;
+                dataGridViewAllBooks->Columns[0]->DefaultCellStyle->Alignment = DataGridViewContentAlignment::MiddleRight;
+
+                dataGridViewAllBooks->Columns[1]->Name = "Название";
+                dataGridViewAllBooks->Columns[1]->MinimumWidth = 150;
+                dataGridViewAllBooks->Columns[1]->FillWeight = 40;
+                dataGridViewAllBooks->Columns[1]->SortMode = DataGridViewColumnSortMode::NotSortable;
+
+                dataGridViewAllBooks->Columns[2]->Name = "Автор";
+                dataGridViewAllBooks->Columns[2]->MinimumWidth = 120;
+                dataGridViewAllBooks->Columns[2]->FillWeight = 25;
+                dataGridViewAllBooks->Columns[2]->SortMode = DataGridViewColumnSortMode::NotSortable;
+
+                dataGridViewAllBooks->Columns[3]->Name = "Рейтинг";
+                dataGridViewAllBooks->Columns[3]->MinimumWidth = 60;
+                dataGridViewAllBooks->Columns[3]->FillWeight = 8;
+                dataGridViewAllBooks->Columns[3]->SortMode = DataGridViewColumnSortMode::NotSortable;
+                dataGridViewAllBooks->Columns[3]->DefaultCellStyle->Alignment = DataGridViewContentAlignment::MiddleRight;
+
+                dataGridViewAllBooks->Columns[4]->Name = "Отзывы";
+                dataGridViewAllBooks->Columns[4]->MinimumWidth = 70;
+                dataGridViewAllBooks->Columns[4]->FillWeight = 10;
+                dataGridViewAllBooks->Columns[4]->SortMode = DataGridViewColumnSortMode::NotSortable;
+                dataGridViewAllBooks->Columns[4]->DefaultCellStyle->Alignment = DataGridViewContentAlignment::MiddleRight;
+                dataGridViewAllBooks->Columns[4]->DefaultCellStyle->Format = "N0";
+
+                dataGridViewAllBooks->Columns[5]->Name = "Цена, $";
+                dataGridViewAllBooks->Columns[5]->MinimumWidth = 70;
+                dataGridViewAllBooks->Columns[5]->FillWeight = 8;
+                dataGridViewAllBooks->Columns[5]->SortMode = DataGridViewColumnSortMode::NotSortable;
+                dataGridViewAllBooks->Columns[5]->DefaultCellStyle->Alignment = DataGridViewContentAlignment::MiddleRight;
+
+                dataGridViewAllBooks->Columns[6]->Name = "Год";
+                dataGridViewAllBooks->Columns[6]->MinimumWidth = 50;
+                dataGridViewAllBooks->Columns[6]->FillWeight = 4;
+                dataGridViewAllBooks->Columns[6]->SortMode = DataGridViewColumnSortMode::NotSortable;
+                dataGridViewAllBooks->Columns[6]->DefaultCellStyle->Alignment = DataGridViewContentAlignment::MiddleRight;
 
                 for (int i = 0; i < sorted->Length; i++)
                 {
@@ -764,12 +790,14 @@ namespace CSVAnalyzer {
                     currentDisplayBooks->Add(book);
 
                     String^ ratingStr = book->UserRating.ToString("F1", CultureInfo::InvariantCulture);
+                    String^ reviewsStr = book->Reviews.ToString("N0", CultureInfo::InvariantCulture);
 
                     dataGridViewAllBooks->Rows->Add(
                         (i + 1).ToString(),
                         book->Name,
                         book->Author,
                         ratingStr,
+                        reviewsStr,
                         "$" + book->Price.ToString("F2"),
                         book->Year.ToString()
                     );
@@ -777,32 +805,16 @@ namespace CSVAnalyzer {
 
                 dataGridViewAllBooks->AutoResizeColumns(DataGridViewAutoSizeColumnsMode::DisplayedCells);
 
-                if (!String::IsNullOrEmpty(activeFilter))
-                {
-                    statusLabel->Text = "Показано " + currentDisplayBooks->Count + " книг. " + GetFilterDescription();
-                }
+                statusLabel->Text = "Показано " + currentDisplayBooks->Count + " книг. " + GetFilterDescription();
 
-                // Восстанавливаем выделение, если была выбрана книга
-                if (selectedBookIndex >= 0 && selectedBookIndex < currentDisplayBooks->Count &&
-                    currentDisplayBooks[selectedBookIndex] == selectedBook)
-                {
-                    isProgrammaticSelection = true;
-                    dataGridViewAllBooks->Rows[selectedBookIndex]->Selected = true;
-                    isProgrammaticSelection = false;
-                }
-                else
-                {
-                    selectedBook = nullptr;
-                    selectedBookIndex = -1;
-                }
+                DrawCharts(filtered);
             }
             else
             {
                 dataGridViewAllBooks->Rows->Clear();
-                if (!String::IsNullOrEmpty(activeFilter))
-                {
-                    statusLabel->Text = "Нет книг, соответствующих фильтру: " + GetFilterDescription();
-                }
+                currentDisplayBooks->Clear();
+                statusLabel->Text = "Нет книг, соответствующих фильтру: " + GetFilterDescription();
+                DrawCharts(baseFiltered);
             }
         }
 
@@ -954,60 +966,94 @@ namespace CSVAnalyzer {
             if (String::IsNullOrEmpty(currentSelectedGenre)) return;
 
             List<Book^>^ filtered = FilterBooksByGenre(currentSelectedGenre);
-
-            // Сохраняем базовый список без сортировки
-            baseFilteredBooks->Clear();
+            currentDisplayBooks->Clear();
             for each(Book ^ book in filtered)
             {
-                baseFilteredBooks->Add(book);
-            }
-
-            // Сортируем по рейтингу для отображения
-            array<Book^>^ sorted = filtered->ToArray();
-            Array::Sort(sorted, gcnew Comparison<Book^>(&MyForm::CompareBooksByRating));
-
-            isProgrammaticSelection = true;
-
-            dataGridViewAllBooks->Rows->Clear();
-            currentDisplayBooks->Clear();
-
-            for (int i = 0; i < sorted->Length; i++)
-            {
-                Book^ book = sorted[i];
                 currentDisplayBooks->Add(book);
-
-                String^ ratingStr = book->UserRating.ToString("F1", CultureInfo::InvariantCulture);
-
-                dataGridViewAllBooks->Rows->Add(
-                    (i + 1).ToString(),
-                    book->Name,
-                    book->Author,
-                    ratingStr,
-                    "$" + book->Price.ToString("F2"),
-                    book->Year.ToString()
-                );
             }
 
-            dataGridViewAllBooks->AutoResizeColumns(DataGridViewAutoSizeColumnsMode::DisplayedCells);
-
-            // Восстанавливаем выделение, если была выбрана книга
-            if (selectedBookIndex >= 0 && selectedBookIndex < currentDisplayBooks->Count &&
-                currentDisplayBooks[selectedBookIndex] == selectedBook)
+            if (filtered->Count > 0)
             {
-                dataGridViewAllBooks->Rows[selectedBookIndex]->Selected = true;
+                array<Book^>^ sortedByRating = currentDisplayBooks->ToArray();
+                Array::Sort(sortedByRating, gcnew Comparison<Book^>(&MyForm::CompareBooksByRating));
+
+                isProgrammaticSelection = true;
+
+                dataGridViewAllBooks->Rows->Clear();
+
+                // Настройка колонок - теперь 7 колонок
+                dataGridViewAllBooks->ColumnCount = 7;
+
+                dataGridViewAllBooks->Columns[0]->Name = "№";
+                dataGridViewAllBooks->Columns[0]->MinimumWidth = 40;
+                dataGridViewAllBooks->Columns[0]->FillWeight = 5;
+                dataGridViewAllBooks->Columns[0]->SortMode = DataGridViewColumnSortMode::NotSortable;
+                dataGridViewAllBooks->Columns[0]->DefaultCellStyle->Alignment = DataGridViewContentAlignment::MiddleRight;
+
+                dataGridViewAllBooks->Columns[1]->Name = "Название";
+                dataGridViewAllBooks->Columns[1]->MinimumWidth = 150;
+                dataGridViewAllBooks->Columns[1]->FillWeight = 40;
+                dataGridViewAllBooks->Columns[1]->SortMode = DataGridViewColumnSortMode::NotSortable;
+
+                dataGridViewAllBooks->Columns[2]->Name = "Автор";
+                dataGridViewAllBooks->Columns[2]->MinimumWidth = 120;
+                dataGridViewAllBooks->Columns[2]->FillWeight = 25;
+                dataGridViewAllBooks->Columns[2]->SortMode = DataGridViewColumnSortMode::NotSortable;
+
+                dataGridViewAllBooks->Columns[3]->Name = "Рейтинг";
+                dataGridViewAllBooks->Columns[3]->MinimumWidth = 60;
+                dataGridViewAllBooks->Columns[3]->FillWeight = 8;
+                dataGridViewAllBooks->Columns[3]->SortMode = DataGridViewColumnSortMode::NotSortable;
+                dataGridViewAllBooks->Columns[3]->DefaultCellStyle->Alignment = DataGridViewContentAlignment::MiddleRight;
+
+                // Новая колонка "Отзывы"
+                dataGridViewAllBooks->Columns[4]->Name = "Отзывы";
+                dataGridViewAllBooks->Columns[4]->MinimumWidth = 70;
+                dataGridViewAllBooks->Columns[4]->FillWeight = 10;
+                dataGridViewAllBooks->Columns[4]->SortMode = DataGridViewColumnSortMode::NotSortable;
+                dataGridViewAllBooks->Columns[4]->DefaultCellStyle->Alignment = DataGridViewContentAlignment::MiddleRight;
+                dataGridViewAllBooks->Columns[4]->DefaultCellStyle->Format = "N0";
+
+                dataGridViewAllBooks->Columns[5]->Name = "Цена, $";
+                dataGridViewAllBooks->Columns[5]->MinimumWidth = 70;
+                dataGridViewAllBooks->Columns[5]->FillWeight = 8;
+                dataGridViewAllBooks->Columns[5]->SortMode = DataGridViewColumnSortMode::NotSortable;
+                dataGridViewAllBooks->Columns[5]->DefaultCellStyle->Alignment = DataGridViewContentAlignment::MiddleRight;
+
+                dataGridViewAllBooks->Columns[6]->Name = "Год";
+                dataGridViewAllBooks->Columns[6]->MinimumWidth = 50;
+                dataGridViewAllBooks->Columns[6]->FillWeight = 4;
+                dataGridViewAllBooks->Columns[6]->SortMode = DataGridViewColumnSortMode::NotSortable;
+                dataGridViewAllBooks->Columns[6]->DefaultCellStyle->Alignment = DataGridViewContentAlignment::MiddleRight;
+
+                // Заполнение строк
+                for (int i = 0; i < sortedByRating->Length; i++)
+                {
+                    Book^ book = sortedByRating[i];
+
+                    String^ ratingStr = book->UserRating.ToString("F1", CultureInfo::InvariantCulture);
+                    String^ reviewsStr = book->Reviews.ToString("N0", CultureInfo::InvariantCulture);
+
+                    dataGridViewAllBooks->Rows->Add(
+                        (i + 1).ToString(),
+                        book->Name,
+                        book->Author,
+                        ratingStr,
+                        reviewsStr,
+                        "$" + book->Price.ToString("F2"),
+                        book->Year.ToString()
+                    );
+                }
+
+                dataGridViewAllBooks->AutoResizeColumns(DataGridViewAutoSizeColumnsMode::DisplayedCells);
+
+                isProgrammaticSelection = false;
+
+                DrawCharts(filtered);
+
+                statusLabel->Text = "Показано " + filtered->Count + " книг в жанре \"" +
+                    (currentSelectedGenre == "Fiction" ? "Художественная" : "Нехудожественная") + "\"";
             }
-            else
-            {
-                selectedBook = nullptr;
-                selectedBookIndex = -1;
-            }
-
-            isProgrammaticSelection = false;
-
-            DrawCharts(filtered);
-
-            statusLabel->Text = "Показано " + filtered->Count + " книг в жанре \"" +
-                (currentSelectedGenre == "Fiction" ? "Художественная" : "Нехудожественная") + "\"";
         }
 
         List<Book^>^ FilterBooksByGenre(String^ genre)
