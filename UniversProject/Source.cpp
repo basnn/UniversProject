@@ -1,7 +1,15 @@
-#include "MyForm.h"
+#include "TextLoaderConfigForm.h"
+#include "Loader.h"
+#include "Date.h"
+#include "Time.h"
+#include"TestForm.h"
+#include <MFP/MFWR.h>
+#include <iostream>
 
 using namespace System;
 using namespace System::Windows::Forms;
+using namespace DataEngine;
+
 
 [STAThread]
 int  WinMain(
@@ -12,7 +20,17 @@ int  WinMain(
 ) {
     Application::EnableVisualStyles();
     Application::SetCompatibleTextRenderingDefault(false);
-    CSVAnalyzer::MyForm form;
-    Application::Run(% form);
+
+    // Инициализация парсеров даты и времени
+    DataEngine::Date::InitializeDefaultParser();
+    DataEngine::Time::InitializeDefaultParser();
+
+    DataEngine::TestForm^ form = gcnew DataEngine::TestForm();
+    Application::Run(form);
+
     return 0;
 }
+
+
+
+

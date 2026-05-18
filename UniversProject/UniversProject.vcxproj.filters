@@ -13,6 +13,27 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{163d458b-be6f-4c1c-8bbb-10b8d78b9883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Loader">
+      <UniqueIdentifier>{83f9189a-2cbf-43d3-bdda-463a27ac0afa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base">
+      <UniqueIdentifier>{bd8e1b43-939a-4a06-a362-5276f79442dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LoadTextForm">
+      <UniqueIdentifier>{ef0e8665-ce16-4ea9-b2fa-e8c81705affc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Table">
+      <UniqueIdentifier>{a41722a1-e867-44ca-a375-fa2c25eb3b5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TableConfigForm">
+      <UniqueIdentifier>{0899b31e-306e-4717-9d12-2a3bbf7039e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Date&amp;Time">
+      <UniqueIdentifier>{8abef906-4ffc-435a-bca4-518c6ceeb244}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
@@ -29,6 +50,48 @@
     <ClInclude Include="MyForm.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="Data.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="DataObject.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TestForm.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="TextLoaderConfigForm.h">
+      <Filter>LoadTextForm</Filter>
+    </ClInclude>
+    <ClInclude Include="ColumnTypeForm.h">
+      <Filter>LoadTextForm</Filter>
+    </ClInclude>
+    <ClInclude Include="Loader.h">
+      <Filter>Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="Table.h">
+      <Filter>Table</Filter>
+    </ClInclude>
+    <ClInclude Include="TableConfigForm.h">
+      <Filter>TableConfigForm</Filter>
+    </ClInclude>
+    <ClInclude Include="ColumnDefinition.h">
+      <Filter>Table</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderDefinition.h">
+      <Filter>Table</Filter>
+    </ClInclude>
+    <ClInclude Include="DateTimeFormat.h">
+      <Filter>Date&amp;Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Date.h">
+      <Filter>Date&amp;Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Date&amp;Time</Filter>
+    </ClInclude>
+    <ClInclude Include="DateTimeBase.h">
+      <Filter>Date&amp;Time</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico">
@@ -41,6 +104,48 @@
     </ClCompile>
     <ClCompile Include="MyForm.cpp">
       <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Data.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="DataObject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TestForm.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="TextLoaderConfigForm.cpp">
+      <Filter>LoadTextForm</Filter>
+    </ClCompile>
+    <ClCompile Include="ColumnTypeForm.cpp">
+      <Filter>LoadTextForm</Filter>
+    </ClCompile>
+    <ClCompile Include="Loader.cpp">
+      <Filter>Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="Table.cpp">
+      <Filter>Table</Filter>
+    </ClCompile>
+    <ClCompile Include="TableConfigForm.cpp">
+      <Filter>TableConfigForm</Filter>
+    </ClCompile>
+    <ClCompile Include="ColumnDefinition.cpp">
+      <Filter>Table</Filter>
+    </ClCompile>
+    <ClCompile Include="HeaderDefinition.cpp">
+      <Filter>Table</Filter>
+    </ClCompile>
+    <ClCompile Include="DateTimeFormat.cpp">
+      <Filter>Date&amp;Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Date.cpp">
+      <Filter>Date&amp;Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Date&amp;Time</Filter>
+    </ClCompile>
+    <ClCompile Include="DateTimeBase.cpp">
+      <Filter>Date&amp;Time</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
