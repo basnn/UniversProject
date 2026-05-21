@@ -34,6 +34,12 @@
     <Filter Include="Date&amp;Time">
       <UniqueIdentifier>{8abef906-4ffc-435a-bca4-518c6ceeb244}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Filtred">
+      <UniqueIdentifier>{7899af27-e90c-4adb-bce9-8363036e2c8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FiltredForms">
+      <UniqueIdentifier>{f3f09f53-1a46-4f8a-a2a8-d08752b49d4d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
@@ -92,6 +98,27 @@
     <ClInclude Include="DateTimeBase.h">
       <Filter>Date&amp;Time</Filter>
     </ClInclude>
+    <ClInclude Include="TableLoader.h">
+      <Filter>Table</Filter>
+    </ClInclude>
+    <ClInclude Include="Filter.h">
+      <Filter>Filtred</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterOperation.h">
+      <Filter>Filtred</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterDefaultOperation.h">
+      <Filter>Filtred</Filter>
+    </ClInclude>
+    <ClInclude Include="FilteredTable.h">
+      <Filter>Filtred</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterHub.h">
+      <Filter>Filtred</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterInfoForm.h">
+      <Filter>FiltredForms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico">
@@ -146,6 +173,24 @@
     </ClCompile>
     <ClCompile Include="DateTimeBase.cpp">
       <Filter>Date&amp;Time</Filter>
+    </ClCompile>
+    <ClCompile Include="TableLoader.cpp">
+      <Filter>Table</Filter>
+    </ClCompile>
+    <ClCompile Include="FilterOperation.cpp">
+      <Filter>Filtred</Filter>
+    </ClCompile>
+    <ClCompile Include="FilterDefaultOperation.cpp">
+      <Filter>Filtred</Filter>
+    </ClCompile>
+    <ClCompile Include="FilteredTable.cpp">
+      <Filter>Filtred</Filter>
+    </ClCompile>
+    <ClCompile Include="FilterHub.cpp">
+      <Filter>Filtred</Filter>
+    </ClCompile>
+    <ClCompile Include="FilterInfoForm.cpp">
+      <Filter>FiltredForms</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

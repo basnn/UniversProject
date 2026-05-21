@@ -147,12 +147,19 @@
     <ClInclude Include="Date.h" />
     <ClInclude Include="DateTimeBase.h" />
     <ClInclude Include="DateTimeFormat.h" />
+    <ClInclude Include="Filter.h" />
+    <ClInclude Include="FilterDefaultOperation.h" />
+    <ClInclude Include="FilteredTable.h" />
+    <ClInclude Include="FilterHub.h" />
+    <ClInclude Include="FilterInfoForm.h" />
+    <ClInclude Include="FilterOperation.h" />
     <ClInclude Include="HeaderDefinition.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="DataObject.h" />
+    <ClInclude Include="TableLoader.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Table.h" />
@@ -178,10 +185,16 @@
     <ClCompile Include="Date.cpp" />
     <ClCompile Include="DateTimeBase.cpp" />
     <ClCompile Include="DateTimeFormat.cpp" />
+    <ClCompile Include="FilterDefaultOperation.cpp" />
+    <ClCompile Include="FilteredTable.cpp" />
+    <ClCompile Include="FilterHub.cpp" />
+    <ClCompile Include="FilterInfoForm.cpp" />
+    <ClCompile Include="FilterOperation.cpp" />
     <ClCompile Include="HeaderDefinition.cpp" />
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="DataObject.cpp" />
+    <ClCompile Include="TableLoader.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Table.cpp" />
     <ClCompile Include="TableConfigForm.cpp" />
